@@ -12,9 +12,12 @@ bigCircle.click(function(f) {
     window.localStorage["startTimeString"] = new Date().toLocaleString();
     bigCircle.animate({r:25},100);
     let textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
-
+    var moveDownGroup = s.group(textStartDisplay);
     function shiftDown() {
-      textStartDisplay.animate({y:parseInt(textStartDisplay.attr('y')) + 50},100);
+      oldPosition = parseInt(textStartDisplay.attr('y')) + 50;
+      var smallCircle = s.circle(150,oldPosition,25);
+      moveDownGroup = s.group(textStartDisplay,s.circle(150,oldPosition,25));
+      textStartDisplay.animate({y:oldPosition},100);
     }
     setInterval(shiftDown,1000);
 
