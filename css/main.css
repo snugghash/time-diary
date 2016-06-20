@@ -371,3 +371,11 @@ nav a:hover {
         page-break-after: avoid;
     }
 }
+
+aside input {
+    background: #e5920d;
+}
+aside textarea {
+    background: #e5920d;
+}
+
