@@ -6,7 +6,13 @@ if (Modernizr.localstorage) {
 }
 let s = Snap("#timeSVG");
 let bigCircle = s.circle(150, 150, 100);
+var isTracking = false;
 bigCircle.click(function(f) {
+    if(isTracking==true) {
+        isTracking=false;
+        clearInterval();
+    }
+    else isTracking=true;
     bigCircle.attr({fill:"#ccc"});
     window.localStorage["startTime"] = new Date().getTime();
     window.localStorage["startTimeString"] = new Date().toLocaleString();
@@ -14,10 +20,10 @@ bigCircle.click(function(f) {
     let textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
     var moveDownGroup = s.group(textStartDisplay);
     function shiftDown() {
-      oldPosition = parseInt(textStartDisplay.attr('y')) + 50;
-      var smallCircle = s.circle(150,oldPosition,25);
-      moveDownGroup = s.group(textStartDisplay,s.circle(150,oldPosition,25));
-      textStartDisplay.animate({y:oldPosition},100);
+        oldPosition = parseInt(textStartDisplay.attr('y')) + 50;
+        var smallCircle = s.circle(150,oldPosition,25);
+        moveDownGroup = s.group(textStartDisplay,s.circle(150,oldPosition,25));
+        textStartDisplay.animate({y:oldPosition},100);
     }
     setInterval(shiftDown,1000);
 
