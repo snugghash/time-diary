@@ -11,6 +11,7 @@ bigCircle.click(function(f) {
     if(isTracking==true) {
         isTracking=false;
         clearInterval();
+        return;
     }
     else isTracking=true;
     bigCircle.attr({fill:"#ccc"});
@@ -20,10 +21,14 @@ bigCircle.click(function(f) {
     let textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
     var moveDownGroup = s.group(textStartDisplay);
     function shiftDown() {
-        oldPosition = parseInt(textStartDisplay.attr('y')) + 50;
-        var smallCircle = s.circle(150,oldPosition,25);
-        moveDownGroup = s.group(textStartDisplay,s.circle(150,oldPosition,25));
-        textStartDisplay.animate({y:oldPosition},100);
+        // increase sive of SVG element to accomodate new objects
+        s.node.style.height = parseInt(s.node.style.height)+50;
+        newPosition = parseInt(textStartDisplay.attr('y')) + 50;
+        // Draw new objects
+        var smallCircle = s.circle(150,newPosition,25);
+        // Move down old objects
+        moveDownGroup = s.group(textStartDisplay,s.circle(150,newPosition,25));
+        textStartDisplay.animate({y:newPosition},100);
     }
     setInterval(shiftDown,1000);
 
