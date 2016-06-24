@@ -379,3 +379,6 @@ aside textarea {
     background: #e5920d;
 }
 
+#tracker {
+    overflow:scroll;
+}
