@@ -7,6 +7,16 @@ if (Modernizr.localstorage) {
 let s = Snap("#timeSVG");
 let bigCircle = s.circle(150, 150, 100);
 var isTracking = false;
+var isTracking = (function() {
+    if(window.localStorage["isTracking"] === null) {
+        alert(JSON.stringify(false));
+        window.localStorage["isTracking"] = JSON.stringify(false);
+        alert("wololo");
+        return false; 
+    }
+    else return window.localStorage["isTracking"];
+})();
+alert(isTracking);
 bigCircle.click(function(f) {
     if(isTracking==true) {
         isTracking=false;
@@ -33,4 +43,9 @@ bigCircle.click(function(f) {
     setInterval(shiftDown,1000);
 
 });
-
+window.onpageshow = function() {
+    alert("page show");
+}
+window.onpagehide = function() {
+    alert("page hidden");
+}
