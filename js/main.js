@@ -14,9 +14,6 @@ let isTracking = (function() {
     else return JSON.parse(window.localStorage["isTracking"]);
 })(); 
 var textStartDisplay, moveDownGroup;
-body.onload = function() {
-    
-}
 
 bigCircle.click(function(f) {
     if(isTracking==true) {
@@ -35,6 +32,11 @@ bigCircle.click(function(f) {
         // Increase size of SVG element to accomodate new objects
         s.node.style.height = parseInt(s.node.style.height)+50;
         newPosition = parseInt(textStartDisplay.attr('y')) + 50;
+        //If objects are out of sync with current time, draw them all at once.
+        if(moveDownGroup.length-1 != (newPosition-200)/50) {
+            alert("Not synced");
+        }
+
         // Draw new objects
         let smallCircle = s.circle(150,newPosition,25);
         // Move down old objects
