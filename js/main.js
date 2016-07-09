@@ -13,15 +13,19 @@ let isTracking = (function() {
     }
     else return JSON.parse(window.localStorage["isTracking"]);
 })(); 
-var textStartDisplay, moveDownGroup;
+var textStartDisplay, moveDownGroup, shiftDownInterval;
 
 bigCircle.click(function(f) {
     if(isTracking==true) {
         isTracking=false;
-        clearInterval();
+        window.localStorage["isTracking"] = JSON.stringify(false);
+        clearInterval(shiftDownInterval);
         return;
     }
-    else isTracking=true;
+    else {
+        isTracking=true;
+        window.localStorage["isTracking"] = JSON.stringify(true);
+    }
     bigCircle.attr({fill:"#ccc"});
     window.localStorage["startTime"] = new Date().getTime();
     window.localStorage["startTimeString"] = new Date().toLocaleString();
@@ -30,19 +34,24 @@ bigCircle.click(function(f) {
     moveDownGroup = s.group(textStartDisplay);
     function shiftDown() {
         // Increase size of SVG element to accomodate new objects
-        s.node.style.height = parseInt(s.node.style.height)+50;
+        s.node.style.height = parseInt(s.node.style.height) + 50;
         newPosition = parseInt(textStartDisplay.attr('y')) + 50;
         //If objects are out of sync with current time, draw them all at once.
-        if(moveDownGroup.length-1 != (newPosition-200)/50) {
-            alert("Not synced");
+        if((parseInt(s.node.style.height)-350)/50 != (newPosition-200)/50) {
+            console.log("Not synced");
         }
 
         // Draw new objects
+        let smallRect = s.rect(125,newPosition,50,50);
+        smallRect.attr({
+            fill: "#5050ff",
+            alpha: "0.1"
+        });
         let smallCircle = s.circle(150,newPosition,25);
         // Move down old objects
-        moveDownGroup = moveDownGroup.add(smallCircle);
+        moveDownGroup = moveDownGroup.add(smallCircle,smallRect);
         textStartDisplay.animate({y:newPosition},100);
     }
-    setInterval(shiftDown,1000);
+    shiftDownInterval = setInterval(shiftDown,1000);
 });
 
