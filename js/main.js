@@ -20,6 +20,9 @@ bigCircle.click(function(f) {
         isTracking=false;
         window.localStorage["isTracking"] = JSON.stringify(false);
         clearInterval(shiftDownInterval);
+        window.localStorage["endTime"] = new Date().getTime();
+        window.localStorage["endTimeString"] = new Date().toLocaleString();
+        let textEndDisplay = s.text(250,150,window.localStorage["endTimeString"]);
         return;
     }
     else {
@@ -45,7 +48,11 @@ bigCircle.click(function(f) {
         let smallRect = s.rect(125,newPosition,50,50);
         smallRect.attr({
             fill: "#5050ff",
-            fill-opacity:"0.4"
+            opacity:"0.4",
+        });
+        //Set onswipe listener for the smallRect
+        $('rect').on("swipe",function(event){
+          alert("swiped");
         });
         let smallCircle = s.circle(150,newPosition,25);
         // Move down old objects
