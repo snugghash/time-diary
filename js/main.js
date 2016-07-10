@@ -45,7 +45,7 @@ bigCircle.click(function(f) {
         let smallRect = s.rect(125,newPosition,50,50);
         smallRect.attr({
             fill: "#5050ff",
-            alpha: "0.1"
+            fill-opacity:"0.4"
         });
         let smallCircle = s.circle(150,newPosition,25);
         // Move down old objects
