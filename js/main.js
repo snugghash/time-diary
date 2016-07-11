@@ -36,20 +36,24 @@ bigCircle.click(function(f) {
   textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
   moveDownGroup = s.group(textStartDisplay);
   function updateTimeStep() {
-    appendElement();
     enlargeSVG();
+    appendElement();
   }
   function enlargeSVG() {
     // Increase size of SVG element to accomodate new objects
     s.node.style.height = parseInt(s.node.style.height) + 50;
     //If objects are out of sync with current time, draw them all at once.
-    while (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50 {
+    let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
+    while (i>0) {
       console.log("Not synced");
       appendElement();
+      debugger;
+      i--;
     }
   }
   function appendElement() {
     newPosition = parseInt(textStartDisplay.attr('y')) + 50;
+    console.log("append"+newPosition);
     // Draw new objects
     let smallRect = s.rect(125,newPosition,50,50);
     smallRect.attr({
