@@ -38,18 +38,18 @@ bigCircle.click(function(f) {
   function updateTimeStep() {
     enlargeSVG();
     appendElement();
+    appendElement();
   }
   function enlargeSVG() {
     // Increase size of SVG element to accomodate new objects
     s.node.style.height = parseInt(s.node.style.height) + 50;
     //If objects are out of sync with current time, draw them all at once.
     let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
-    while (i>0) {
+    /*while (i>0) {
       console.log("Not synced");
       appendElement();
-      debugger;
       i--;
-    }
+    }*/
   }
   function appendElement() {
     newPosition = parseInt(textStartDisplay.attr('y')) + 50;
