@@ -6,7 +6,12 @@ if (Modernizr.localstorage) {
 }
 let s = Snap("#timeSVG");
 let timeSVG = $('#timeSVG');
-let bigCircle = s.circle(150, 150, 100);
+
+const secondHeight = 50;
+const minuteHeight = 100;
+const hourHeight = 150;
+
+let bigCircle = s.circle(150, 150, minuteHeight); // TODO fix in beta, starting and ending UX to be better
 let isTracking = (function() {
   if(window.localStorage.getItem("isTracking") === null) {
     window.localStorage["isTracking"] = JSON.stringify(false);
@@ -54,9 +59,9 @@ bigCircle.click(function(f) {
   }
   function appendElement() {
     newPosition = parseInt(textStartDisplay.attr('y')) + 50;
-    console.log("append"+newPosition);
+    console.log("Append at " + newPosition);
     // Draw new objects
-    let smallRect = s.rect(125,newPosition,50,50);
+    let smallRect = s.rect(125, newPosition, secondHeight, secondHeight);
     smallRect.attr({
       fill: "#5050ff",
       opacity:"0.4",
@@ -65,7 +70,7 @@ bigCircle.click(function(f) {
     $('rect').on("swipe",function(event){
       alert("swiped");
     });
-    let smallCircle = s.circle(150,newPosition,25);
+    let smallCircle = s.circle(150, newPosition, secondHeight/2);
     // Move down old objects
     moveDownGroup = moveDownGroup.add(smallCircle,smallRect);
     textStartDisplay.animate({y:newPosition},100);
