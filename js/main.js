@@ -5,6 +5,7 @@ if (Modernizr.localstorage) {
   // maybe try dojox.storage or a third-party solution
 }
 let s = Snap("#timeSVG");
+let timeSVG = $('#timeSVG');
 let bigCircle = s.circle(150, 150, 100);
 let isTracking = (function() {
   if(window.localStorage.getItem("isTracking") === null) {
@@ -42,7 +43,7 @@ bigCircle.click(function(f) {
   }
   function enlargeSVG() {
     // Increase size of SVG element to accomodate new objects
-    s.node.style.height = parseInt(s.node.style.height) + 50;
+    timeSVG.height(timeSVG.height() + 50);
     //If objects are out of sync with current time, draw them all at once.
     let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
     /*while (i>0) {
