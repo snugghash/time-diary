@@ -21,6 +21,28 @@ let isTracking = (function() {
 })(); 
 var textStartDisplay, moveDownGroup, updateTimeStepCaller;
 
+let storeEntry = function (description, startTime, endTime) {
+  let rowNumber = null;
+  if(window.localStorage.getItem("rowNumber") === null) {
+    window.localStorage["rowNumber"] = 1;
+    rowNumber = 1;
+  }
+  else {
+    rowNumber = window.localStorage["rowNumber"] + 1;
+  }
+  let entries = [];
+  if(window.localStorage.getItem("entries") === null) {
+    ;
+  }
+  else {
+    entries = JSON.parse(window.localStorage["entries"]);
+  }
+  entries.push({startTime, endTime, description, tags});
+  window.localStorage["entries"] = JSON.stringify(entries);
+  window.localStorage["rowNumber"] = rowNumber;
+
+};
+
 bigCircle.click(function(f) {
   if(isTracking==true) {
     isTracking=false;
@@ -66,10 +88,15 @@ bigCircle.click(function(f) {
       fill: "#5050ff",
       opacity:"0.4",
     });
-    //Set onswipe listener for the smallRect
-    $('rect').on("swipe",function(event){
-      alert("swiped");
-    });
+    // Listen for time slice events.
+    smallRect.node.ondblclick = function(event){
+      endTime = new Date().getTime();
+      startTime = localStorage["startTime"];
+      console.log("Sliced at " + event.target.attributes['y'].value + " on " + new Date().toLocaleString());
+      // Ask user for description of the time slice.
+      let description = prompt("Journal entry for the time slice until " + new Date().toLocaleString());
+      storeEntry(description, startTime, endTime);
+    };
     let smallCircle = s.circle(150, newPosition, secondHeight/2);
     // Move down old objects
     moveDownGroup = moveDownGroup.add(smallCircle,smallRect);
