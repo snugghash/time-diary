@@ -77,9 +77,9 @@ bigCircle.click(function(f) {
   }
   function enlargeSVG() {
     // Increase size of SVG element to accomodate new objects
-    timeSVG.height(timeSVG.height() + 50);
+    timeSVG.height(timeSVG.height() + secondHeight);
     //If objects are out of sync with current time, draw them all at once.
-    let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
+    // let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
     /*while (i>0) {
       console.log("Not synced");
       appendElement();
@@ -87,7 +87,7 @@ bigCircle.click(function(f) {
     }*/
   }
   function appendElement() {
-    newPosition = parseInt(textStartDisplay.attr('y')) + 50;
+    newPosition = parseInt(textStartDisplay.attr('y')) + secondHeight;
     console.log("Append at " + newPosition);
     // Draw new objects
     let smallRect = s.rect(125, newPosition, secondHeight, secondHeight);

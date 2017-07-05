@@ -3,13 +3,15 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
+    <name>          -- <role>     -- <twitter>
+    Suhas Gundimeda -- Everything -- snugghash
 
 # THANKS
 
-    <name>
+    Parents, for supporting me through life :)
 
 # TECHNOLOGY COLOPHON
 
     HTML5, CSS3
     jQuery, Modernizr
+    Snap.svg
