@@ -21,7 +21,7 @@ let isTracking = (function() {
 })(); 
 var textStartDisplay, moveDownGroup, updateTimeStepCaller;
 
-let storeEntry = function (description, startTime, endTime) {
+let storeEntry = function (startTime, endTime, description, tags) {
   let rowNumber = null;
   if(window.localStorage.getItem("rowNumber") === null) {
     window.localStorage["rowNumber"] = 1;
@@ -40,7 +40,14 @@ let storeEntry = function (description, startTime, endTime) {
   entries.push({startTime, endTime, description, tags});
   window.localStorage["entries"] = JSON.stringify(entries);
   window.localStorage["rowNumber"] = rowNumber;
+};
 
+let getTags = function (description) {
+  return description.split(" ").filter(function (word) {
+    return word.slice(-1) == ";";
+  }).map(function (word) {
+    return word.slice(0, -1);
+  });
 };
 
 bigCircle.click(function(f) {
@@ -95,7 +102,9 @@ bigCircle.click(function(f) {
       console.log("Sliced at " + event.target.attributes['y'].value + " on " + new Date().toLocaleString());
       // Ask user for description of the time slice.
       let description = prompt("Journal entry for the time slice until " + new Date().toLocaleString());
-      storeEntry(description, startTime, endTime);
+      storeEntry(startTime, endTime, description, getTags(description));
+      window.localStorage["startTime"] = new Date().getTime();
+      window.localStorage["startTimeString"] = new Date().toLocaleString();
     };
     let smallCircle = s.circle(150, newPosition, secondHeight/2);
     // Move down old objects
