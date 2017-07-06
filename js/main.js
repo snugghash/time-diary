@@ -105,6 +105,7 @@ bigCircle.click(function(f) {
       storeEntry(startTime, endTime, description, getTags(description));
       window.localStorage["startTime"] = new Date().getTime();
       window.localStorage["startTimeString"] = new Date().toLocaleString();
+      exportData();
     };
     let smallCircle = s.circle(150, newPosition, secondHeight/2);
     // Move down old objects
@@ -114,3 +115,32 @@ bigCircle.click(function(f) {
   updateTimeStepCaller = setInterval(updateTimeStep,1000);
 });
 
+
+/* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
+ * Credits: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable#8924856
+ */
+let JsonArrToCsv = function (array) {
+  let str = "";
+  for(let i=0; i < array.length; i++) {
+    let line = '';
+    for (var index in array[i]) {
+      if (line != '')
+        line += ',';
+      line += array[i][index];
+    }
+    str += line + '\r\n';
+  }
+  return str;
+}
+
+/* Modifies a link's href to point to a CSV file with journal entries generated from a JSON array (TODO perhaps doing this on demand, perhaps storing and appending to the final CSV in localStorage along with the JSON array would be better, performance-wise), to be viewed/saved by the user.
+ * Credits: https://stackoverflow.com/questions/16428835/save-data-from-localstorage-to-csv#16430518
+ */
+let exportData = function () {
+  let trackedData = JsonArrToCsv(JSON.parse(localStorage.getItem("entries")));
+  var blob = new Blob([trackedData], {type: "text/csv"});
+  var url = URL.createObjectURL(blob);
+  var a = document.querySelector("#export-data"); // id of the <a> element to render the download link
+  a.href = url;
+  a.download = "timeDiaryData.csv";
+}
