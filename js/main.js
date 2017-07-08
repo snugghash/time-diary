@@ -119,7 +119,7 @@ bigCircle.click(function(f) {
 /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
  * Credits: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable#8924856
  */
-let JsonArrToCsv = function (array) {
+let jsonArrToCsv = function (array) {
   let str = "";
   for(let i=0; i < array.length; i++) {
     let line = '';
@@ -137,7 +137,7 @@ let JsonArrToCsv = function (array) {
  * Credits: https://stackoverflow.com/questions/16428835/save-data-from-localstorage-to-csv#16430518
  */
 let exportData = function () {
-  let trackedData = JsonArrToCsv(JSON.parse(localStorage.getItem("entries")));
+  let trackedData = jsonArrToCsv(JSON.parse(localStorage.getItem("entries")));
   var blob = new Blob([trackedData], {type: "text/csv"});
   var url = URL.createObjectURL(blob);
   var a = document.querySelector("#export-data"); // id of the <a> element to render the download link

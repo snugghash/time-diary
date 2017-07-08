@@ -19,4 +19,4 @@
 ## Support, feature requests, donations
 Troubleshooting support costs you based on the speed of response.
 Place bounty for feature requests on bountysource.
-PWYW [here](snugghash.github.io/timeDiary/donate)
+PWYW [here](http://snugghash.github.io/timeDiary/donate)
