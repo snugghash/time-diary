@@ -21,7 +21,11 @@ let isTracking = (function() {
 })(); 
 var textStartDisplay, moveDownGroup, updateTimeStepCaller;
 
+/**
+ * Store given time slice data into localStorage
+ */
 let storeEntry = function (startTime, endTime, description, tags) {
+  // TODO remove unnecessary row number
   let rowNumber = null;
   if(window.localStorage.getItem("rowNumber") === null) {
     window.localStorage["rowNumber"] = 1;
@@ -40,8 +44,43 @@ let storeEntry = function (startTime, endTime, description, tags) {
   entries.push({startTime, endTime, description, tags});
   window.localStorage["entries"] = JSON.stringify(entries);
   window.localStorage["rowNumber"] = rowNumber;
+
+  // Collect all tags into a localStorage array.
+  let tagsList = ["Games", "Organizing"];
+  if(window.localStorage.getItem("tagList") === null) {
+    ;
+  }
+  else {
+    tagsList.push(JSON.parse(window.localStorage["tagsList"]));
+  }
+  tagsList = new Set(tagsList);
+  tags.forEach( (item) => {
+    tagsList.add(item);
+  });
+  tagsList = Array.from(tagsList);
+  console.log("All tags:", tagsList);
+  window.localStorage["tagsList"] = JSON.stringify(tagsList);
+
+  // Add to times for each tag
+  let tagTimes = {}
+  if(window.localStorage.getItem("tagTimes") === null) {
+    ;
+  }
+  else {
+    tagTimes = JSON.parse(window.localStorage["tagTimes"]);
+  }
+  tags.forEach( (item) => {
+    if(item in tagTimes)
+      tagTimes[item] += endTime - startTime;
+    else
+      tagTimes[item] = endTime - startTime;
+  });
+  window.localStorage["tagTimes"] = JSON.stringify(tagTimes);
 };
 
+/**
+ * Parse the tags out from the text description, rn just stuff ending with ';' or starting with '#'
+ */
 let getTags = function (description) {
   return description.split(" ").filter(function (word) {
     return word.slice(-1) == ";";
