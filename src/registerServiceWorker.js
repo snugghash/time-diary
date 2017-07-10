@@ -56,11 +56,13 @@ function registerValidSW(swUrl) {
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
+              // TODO
               console.log('New content is available; please refresh.');
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
+              // TODO
               console.log('Content is cached for offline use.');
             }
           }
@@ -93,6 +95,7 @@ function checkValidServiceWorker(swUrl) {
       }
     })
     .catch(() => {
+      // TODO
       console.log(
         'No internet connection found. App is running in offline mode.'
       );
