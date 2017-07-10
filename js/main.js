@@ -62,7 +62,7 @@ let storeEntry = function (startTime, endTime, description, tags) {
   window.localStorage["tagsList"] = JSON.stringify(tagsList);
 
   // Add to times for each tag
-  let tagTimes = {}
+  let tagTimes = []
   if(window.localStorage.getItem("tagTimes") === null) {
     ;
   }
@@ -71,9 +71,12 @@ let storeEntry = function (startTime, endTime, description, tags) {
   }
   tags.forEach( (item) => {
     if(item in tagTimes)
-      tagTimes[item] += endTime - startTime;
+      tagTimes[tagTimes.indexOf(item)].time += endTime - startTime;
     else
-      tagTimes[item] = endTime - startTime;
+      tagTimes.push({
+        tag: item,
+        time: endTime - startTime
+      });
   });
   window.localStorage["tagTimes"] = JSON.stringify(tagTimes);
 };
@@ -115,7 +118,7 @@ bigCircle.click(function(f) {
     appendElement();
   }
   function enlargeSVG() {
-    // Increase size of SVG element to accomodate new objects
+    // Increase size of SVG element to accommodate new objects
     timeSVG.height(timeSVG.height() + secondHeight);
     //If objects are out of sync with current time, draw them all at once.
     // let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
