@@ -1,18 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './css/Second.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <Second/>
+    );
+  }
+}
+
+class Second extends Component {
+  render() {
+    const secondHeight = 25;
+    return (
+      <div className="Second" style={{height:secondHeight + "px"}}>
+      </div>
+    );
+  }
+}
+
+class Minute extends Component {
+  render() {
+    const minuteHeight = 50;
+    return (
+      <div className="Minute" style={{height:minuteHeight+ "px"}}>
+      </div>
+    );
+  }
+}
+
+class Hour extends Component {
+  render() {
+    const hourHeight = 100;
+    return (
+      <div className="Hour" style={{height:hourHeight+ "px"}} >
       </div>
     );
   }
