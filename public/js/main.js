@@ -153,11 +153,11 @@ function appendElement(elementHeight) {
   });
   // Listen for time slice events.
   smallRect.node.ondblclick = function(event) {
-    endTime = new Date().getTime();
+    endTime = new Date().getTime() - 1000*(event.target.attributes['y'].value - 150)/elementHeight; 
     startTime = localStorage["startTime"];
-    console.log("Sliced at " + event.target.attributes['y'].value + " on " + new Date().toLocaleString());
+    console.log("Sliced at " + endTime + " from " + startTime);
     // Ask user for description of the time slice.
-    let description = prompt("Journal entry for the time slice until " + new Date().toLocaleString());
+    let description = prompt("Journal entry for the time slice until " + new Date(endTime).toLocaleString());
     storeEntry(startTime, endTime, description, getTags(description));
     window.localStorage["startTime"] = new Date().getTime();
     window.localStorage["startTimeString"] = new Date().toLocaleString();
