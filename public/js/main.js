@@ -7,9 +7,10 @@ if (Modernizr.localstorage) {
 let s = Snap("#timeSVG");
 let timeSVG = $('#timeSVG');
 
-const secondHeight = 50;
-const minuteHeight = 100;
-const hourHeight = 150;
+const secondHeight = 25;
+const minuteHeight = 50;
+const hourHeight = 75;
+const dayHeight = 100;
 
 let bigCircle = s.circle(150, 150, minuteHeight); // TODO fix in beta, starting and ending UX to be better
 let isTracking = (function() {
@@ -109,54 +110,67 @@ bigCircle.click(function(f) {
   bigCircle.attr({fill:"#ccc"});
   window.localStorage["startTime"] = new Date().getTime();
   window.localStorage["startTimeString"] = new Date().toLocaleString();
-  bigCircle.animate({r:25},100);
+  bigCircle.animate({r:secondHeight/2},100);
   textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
   moveDownGroup = s.group(textStartDisplay);
-  function updateTimeStep() {
-    enlargeSVG();
-    appendElement();
-    appendElement();
-  }
-  function enlargeSVG() {
-    // Increase size of SVG element to accommodate new objects
-    timeSVG.height(timeSVG.height() + secondHeight);
-    //If objects are out of sync with current time, draw them all at once.
-    // let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
-    /*while (i>0) {
-      console.log("Not synced");
-      appendElement();
-      i--;
-    }*/
-  }
-  function appendElement() {
-    newPosition = parseInt(textStartDisplay.attr('y')) + secondHeight;
-    console.log("Append at " + newPosition);
-    // Draw new objects
-    let smallRect = s.rect(125, newPosition, secondHeight, secondHeight);
-    smallRect.attr({
-      fill: "#5050ff",
-      opacity:"0.4",
-    });
-    // Listen for time slice events.
-    smallRect.node.ondblclick = function(event){
-      endTime = new Date().getTime();
-      startTime = localStorage["startTime"];
-      console.log("Sliced at " + event.target.attributes['y'].value + " on " + new Date().toLocaleString());
-      // Ask user for description of the time slice.
-      let description = prompt("Journal entry for the time slice until " + new Date().toLocaleString());
-      storeEntry(startTime, endTime, description, getTags(description));
-      window.localStorage["startTime"] = new Date().getTime();
-      window.localStorage["startTimeString"] = new Date().toLocaleString();
-      exportData();
-    };
-    let smallCircle = s.circle(150, newPosition, secondHeight/2);
-    // Move down old objects
-    moveDownGroup = moveDownGroup.add(smallCircle,smallRect);
-    textStartDisplay.animate({y:newPosition},100);
-  }
-  updateTimeStepCaller = setInterval(updateTimeStep,1000);
+  updateTimeStepCaller = setInterval(updateTimeStep(secondHeight),1000);
 });
 
+/*
+ * Functions to call every time step
+ */
+function updateTimeStep(secondHeight) {
+  return (secondHeight) => {
+    enlargeSVG(secondHeight);
+    appendElement();
+    appendElement();
+  }
+}
+
+/*
+ * Enlarge the SVG by the amount in the argument
+ */
+function enlargeSVG(deltaHeight) {
+  // Increase size of SVG element to accommodate new objects
+  timeSVG.height(timeSVG.height() + deltaHeight);
+  //If objects are out of sync with current time, draw them all at once.
+  // let i = (parseInt(s.node.style.height)-350)/50 - (parseInt(textStartDisplay.attr('y'))-150)/50;
+  /*while (i>0) {
+    console.log("Not synced");
+    appendElement();
+    i--;
+  }*/
+}
+
+/*
+ * Append a time measure to the display
+ */
+function appendElement() {
+  newPosition = parseInt(textStartDisplay.attr('y')) + secondHeight;
+  console.log("Append at " + newPosition);
+  // Draw new objects
+  let smallRect = s.rect(125, newPosition, secondHeight, secondHeight-3);
+  smallRect.attr({
+    fill: "#5050ff",
+    opacity:"0.4",
+  });
+  // Listen for time slice events.
+  smallRect.node.ondblclick = function(event) {
+    endTime = new Date().getTime();
+    startTime = localStorage["startTime"];
+    console.log("Sliced at " + event.target.attributes['y'].value + " on " + new Date().toLocaleString());
+    // Ask user for description of the time slice.
+    let description = prompt("Journal entry for the time slice until " + new Date().toLocaleString());
+    storeEntry(startTime, endTime, description, getTags(description));
+    window.localStorage["startTime"] = new Date().getTime();
+    window.localStorage["startTimeString"] = new Date().toLocaleString();
+    exportData();
+  };
+  let smallCircle = s.circle(150, newPosition, secondHeight/2);
+  // Move down old objects
+  moveDownGroup = moveDownGroup.add(smallCircle, smallRect);
+  textStartDisplay.animate({y:newPosition},100);
+}
 
 /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
  * Credits: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable#8924856
