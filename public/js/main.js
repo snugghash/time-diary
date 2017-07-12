@@ -12,7 +12,7 @@ const minuteHeight = 20;
 const hourHeight = 50;
 const dayHeight = 100;
 
-let bigCircle = s.circle(150, 150, minuteHeight); // TODO fix in beta, starting and ending UX to be better
+let bigCircle = s.circle(150, 150, dayHeight); // TODO fix in beta, starting and ending UX to be better
 let isTracking = (function() {
   if(window.localStorage.getItem("isTracking") === null) {
     window.localStorage["isTracking"] = JSON.stringify(false);
@@ -108,7 +108,7 @@ bigCircle.click(function(f) {
   bigCircle.attr({fill:"#ccc"});
   window.localStorage["startTime"] = new Date().getTime();
   window.localStorage["startTimeString"] = new Date().toLocaleString();
-  bigCircle.animate({r:secondHeight/2},100);
+  bigCircle.animate({r:dayHeight/2},100);
   textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
   moveDownGroup = s.group(textStartDisplay);
   updateTimeStepCaller = setInterval(updateTimeStep,1000);
