@@ -7,9 +7,9 @@ if (Modernizr.localstorage) {
 let s = Snap("#timeSVG");
 let timeSVG = $('#timeSVG');
 
-const secondHeight = 25;
-const minuteHeight = 50;
-const hourHeight = 75;
+const secondHeight = 10;
+const minuteHeight = 20;
+const hourHeight = 50;
 const dayHeight = 100;
 
 let bigCircle = s.circle(150, 150, minuteHeight); // TODO fix in beta, starting and ending UX to be better
@@ -103,10 +103,8 @@ bigCircle.click(function(f) {
     let textEndDisplay = s.text(250,150,window.localStorage["endTimeString"]);
     return;
   }
-  else {
-    isTracking=true;
-    window.localStorage["isTracking"] = JSON.stringify(true);
-  }
+  isTracking=true;
+  window.localStorage["isTracking"] = JSON.stringify(true);
   bigCircle.attr({fill:"#ccc"});
   window.localStorage["startTime"] = new Date().getTime();
   window.localStorage["startTimeString"] = new Date().toLocaleString();
@@ -121,14 +119,15 @@ bigCircle.click(function(f) {
  */
 function updateTimeStep() {
   enlargeSVG(secondHeight);
-  appendElement();
-  appendElement();
+  appendElement(secondHeight);
+  appendElement(secondHeight);
 }
 
 /*
  * Enlarge the SVG by the amount in the argument
  */
 function enlargeSVG(deltaHeight) {
+  let timeSVG = $('#timeSVG');
   // Increase size of SVG element to accommodate new objects
   timeSVG.height(timeSVG.height() + deltaHeight);
   //If objects are out of sync with current time, draw them all at once.
@@ -143,11 +142,11 @@ function enlargeSVG(deltaHeight) {
 /*
  * Append a time measure to the display
  */
-function appendElement() {
-  newPosition = parseInt(textStartDisplay.attr('y')) + secondHeight;
+function appendElement(elementHeight) {
+  newPosition = parseInt(textStartDisplay.attr('y')) + elementHeight;
   console.log("Append at " + newPosition);
   // Draw new objects
-  let smallRect = s.rect(150-secondHeight/2, newPosition, secondHeight, secondHeight-3);
+  let smallRect = s.rect(150-elementHeight/2, newPosition, elementHeight, elementHeight-3);
   smallRect.attr({
     fill: "#5050ff",
     opacity:"0.4",
@@ -164,7 +163,7 @@ function appendElement() {
     window.localStorage["startTimeString"] = new Date().toLocaleString();
     exportData();
   };
-  let smallCircle = s.circle(150, newPosition, secondHeight/2);
+  let smallCircle = s.circle(150, newPosition, elementHeight/2);
   // Move down old objects
   moveDownGroup = moveDownGroup.add(smallCircle, smallRect);
   textStartDisplay.animate({y:newPosition},100);
