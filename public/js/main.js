@@ -113,18 +113,16 @@ bigCircle.click(function(f) {
   bigCircle.animate({r:secondHeight/2},100);
   textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
   moveDownGroup = s.group(textStartDisplay);
-  updateTimeStepCaller = setInterval(updateTimeStep(secondHeight),1000);
+  updateTimeStepCaller = setInterval(updateTimeStep,1000);
 });
 
 /*
  * Functions to call every time step
  */
-function updateTimeStep(secondHeight) {
-  return (secondHeight) => {
-    enlargeSVG(secondHeight);
-    appendElement();
-    appendElement();
-  }
+function updateTimeStep() {
+  enlargeSVG(secondHeight);
+  appendElement();
+  appendElement();
 }
 
 /*
@@ -149,7 +147,7 @@ function appendElement() {
   newPosition = parseInt(textStartDisplay.attr('y')) + secondHeight;
   console.log("Append at " + newPosition);
   // Draw new objects
-  let smallRect = s.rect(125, newPosition, secondHeight, secondHeight-3);
+  let smallRect = s.rect(150-secondHeight/2, newPosition, secondHeight, secondHeight-3);
   smallRect.attr({
     fill: "#5050ff",
     opacity:"0.4",

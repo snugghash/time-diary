@@ -43,8 +43,8 @@ let chart = {
     }
   ],
   "axes": [
-    { "orient": "bottom", "scale": "xscale" },
-    { "orient": "left", "scale": "yscale" }
+    { "orient": "bottom", "scale": "xscale", "title": "Tags" },
+    { "orient": "left", "scale": "yscale", "title": "Time (ms)" }
   ],
   "marks": [
     {
