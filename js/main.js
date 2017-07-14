@@ -112,6 +112,10 @@ bigCircle.click(function(f) {
   textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
   moveDownGroup = s.group(textStartDisplay);
   updateTimeStepCaller = setInterval(updateTimeStep,1000);
+  if (new Date().getTime() - window.localStorage["startTime"] > 60000) {
+    updateTimeStepCaller.stopInterval();
+    updateTimeStepCaller = setInterval(updateTimeStep,1000);
+  }
 });
 
 /*
@@ -151,6 +155,10 @@ function appendElement(elementHeight) {
     fill: "#5050ff",
     opacity:"0.4",
   });
+  let smallCircle = s.circle(150, newPosition, elementHeight/2);
+  // Move down old objects
+  moveDownGroup = moveDownGroup.add(smallCircle, smallRect);
+  textStartDisplay.animate({y:newPosition},100);
   // Listen for time slice events.
   smallRect.node.ondblclick = function(event) {
     endTime = new Date().getTime() - 1000*(event.target.attributes['y'].value - 150)/elementHeight; 
@@ -162,11 +170,12 @@ function appendElement(elementHeight) {
     window.localStorage["startTime"] = new Date().getTime();
     window.localStorage["startTimeString"] = new Date().toLocaleString();
     exportData();
+    let allNodes = s.selectAll('*');
+    allNodes.forEach(function(subelement) {
+      subelement.;
+    });
   };
-  let smallCircle = s.circle(150, newPosition, elementHeight/2);
-  // Move down old objects
-  moveDownGroup = moveDownGroup.add(smallCircle, smallRect);
-  textStartDisplay.animate({y:newPosition},100);
+  
 }
 
 /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
