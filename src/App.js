@@ -2,9 +2,39 @@ import React, { Component } from 'react';
 import './css/Second.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      tracking: false,
+      startTime: null,
+      endTime: null,
+      trackedTime: null,
+      numberOfSeconds: 5,
+      numberOfMinutes: null,
+      numberOfHours: null,
+      numberOfDays: null,
+      numberOfMonths: null,
+      numberOfYears: null
+    };
+  }
   render() {
+    let seconds = new Array(this.state.numberOfSeconds);
+    let secondsArray = [
+    <Second />,
+    <Second />,
+    <Second />,
+    ];
     return (
-      <Second/>
+      // https://stackoverflow.com/a/37379388
+      <div>
+        {seconds.map((entry,index) => {
+          return <Second key={index}/>
+        })}
+        <Second key={1}/>
+        <Second key={2}/>
+        <Second key={3}/>
+        {secondsArray}
+      </div>
     );
   }
 }
