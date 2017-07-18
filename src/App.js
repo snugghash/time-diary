@@ -18,18 +18,14 @@ class App extends Component {
     };
   }
   render() {
-    const seconds = new Array(this.state.numberOfSeconds);
+    // https://stackoverflow.com/a/20066663/
+    const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      console.log("w");
       return <Second key={index}/>
     });
-    console.log(seconds);
     return (
       // https://stackoverflow.com/a/37379388
       <div>
-        <Second key={1} number={this.state.numberOfSeconds}/>
-        <Second key={2}/>
-        <Second key={3}/>
         {secondsArray}
       </div>
     );
@@ -38,7 +34,7 @@ class App extends Component {
 
 class Second extends Component {
   render() {
-    let secondHeight = 25 * this.props.number;
+    let secondHeight = 25;
     return (
       <div className="Second" style={{height:secondHeight + "px"}}>
       </div>
