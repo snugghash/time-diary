@@ -6,31 +6,68 @@ class App extends Component {
     super();
     this.state = {
       tracking: false,
-      startTime: null,
+      startTime: new Date().getTime(),
       endTime: null,
       trackedTime: null,
       numberOfSeconds: 5,
-      numberOfMinutes: null,
-      numberOfHours: null,
+      numberOfMinutes: 1,
+      numberOfHours: 1,
       numberOfDays: null,
       numberOfMonths: null,
       numberOfYears: null
     };
   }
+
+  getInitialState() {
+    console.log("TODO get intial state from localStorage");
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  tick() {
+    if(this.state.tracking) {
+      this.setState({
+        numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000),
+        numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000),
+        numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000),
+      });
+    }
+  }
+
   render() {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      return <Second key={index}/>
+      return <Second key={index} />
+    });
+    const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
+    const minutesArray = seconds.map((entry,index) => {
+      return <Minute key={index} />
+    });
+    const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
+    const hoursArray = seconds.map((entry,index) => {
+      return <Hour key={index} />
     });
     return (
       // https://stackoverflow.com/a/37379388
       <div>
         {secondsArray}
+        {minutesArray}
+        {hoursArray}
       </div>
     );
   }
 }
+
 
 class Second extends Component {
   render() {
