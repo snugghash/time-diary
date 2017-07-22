@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './css/Second.css';
+import './css/Minute.css';
+import './css/Hour.css';
 
 class App extends Component {
   constructor() {
@@ -71,7 +73,7 @@ class App extends Component {
 
 class Second extends Component {
   render() {
-    let secondHeight = 25;
+    let secondHeight = 1;
     return (
       <div className="Second" style={{height:secondHeight + "px"}}>
       </div>
@@ -81,7 +83,7 @@ class Second extends Component {
 
 class Minute extends Component {
   render() {
-    const minuteHeight = 50;
+    const minuteHeight = 10;
     return (
       <div className="Minute" style={{height:minuteHeight+ "px"}}>
       </div>
@@ -91,7 +93,7 @@ class Minute extends Component {
 
 class Hour extends Component {
   render() {
-    const hourHeight = 100;
+    const hourHeight = 50;
     return (
       <div className="Hour" style={{height:hourHeight+ "px"}} >
       </div>
