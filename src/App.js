@@ -67,7 +67,7 @@ class App extends Component {
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
     const hoursArray = hours.map((entry,index) => {
-      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} />
+      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onclick={function() { console.log(this.props.time)} }/>
     });
     return (
       // https://stackoverflow.com/a/37379388
@@ -106,7 +106,7 @@ class Hour extends Component {
   render() {
     const hourHeight = 50;
     return (
-      <div className="Hour" style={{height:hourHeight+ "px"}} >
+      <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={this.props.onclick.bind(this)}>
       {new Date(this.props.time).toLocaleString()}
       </div>
     );
