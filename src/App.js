@@ -6,9 +6,18 @@ import './css/Hour.css';
 class App extends Component {
   constructor() {
     super();
+    // Copy values from localStorage
+    let inLocalStorage = function(variable, defaultValue) {
+      if(window.localStorage.getItem(variable) === null) {
+        window.localStorage[variable] = JSON.stringify(defaultValue);
+        return defaultValue;
+      }
+      else return JSON.parse(window.localStorage[variable]);
+    };
+
     this.state = {
       tracking: true,
-      startTime: new Date().getTime(),
+      startTime: inLocalStorage("startTime", new Date().getTime()),
       endTime: null,
       trackedTime: null,
       numberOfSeconds: null,
