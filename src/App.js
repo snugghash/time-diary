@@ -7,13 +7,13 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      tracking: false,
+      tracking: true,
       startTime: new Date().getTime(),
       endTime: null,
       trackedTime: null,
-      numberOfSeconds: 5,
-      numberOfMinutes: 1,
-      numberOfHours: 1,
+      numberOfSeconds: null,
+      numberOfMinutes: null,
+      numberOfHours: null,
       numberOfDays: null,
       numberOfMonths: null,
       numberOfYears: null
@@ -38,9 +38,10 @@ class App extends Component {
   tick() {
     if(this.state.tracking) {
       this.setState({
-        numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000),
-        numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000),
-        numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000),
+        numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000)%60,
+        numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000)%60,
+        numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000)%24,
+        trackedTime: new Date().getTime() - this.state.startTime,
       });
     }
   }
@@ -49,15 +50,15 @@ class App extends Component {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      return <Second key={index} />
+      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} />
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
-    const minutesArray = seconds.map((entry,index) => {
-      return <Minute key={index} />
+    const minutesArray = minutes.map((entry,index) => {
+      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} />
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
-    const hoursArray = seconds.map((entry,index) => {
-      return <Hour key={index} />
+    const hoursArray = hours.map((entry,index) => {
+      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} />
     });
     return (
       // https://stackoverflow.com/a/37379388
@@ -83,9 +84,10 @@ class Second extends Component {
 
 class Minute extends Component {
   render() {
-    const minuteHeight = 10;
+    const minuteHeight = 20;
     return (
       <div className="Minute" style={{height:minuteHeight+ "px"}}>
+      {new Date(this.props.time).toLocaleString()}
       </div>
     );
   }
@@ -96,6 +98,7 @@ class Hour extends Component {
     const hourHeight = 50;
     return (
       <div className="Hour" style={{height:hourHeight+ "px"}} >
+      {new Date(this.props.time).toLocaleString()}
       </div>
     );
   }
