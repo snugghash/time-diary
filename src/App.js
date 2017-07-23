@@ -55,6 +55,19 @@ class App extends Component {
     }
   }
 
+  uponSlicingTime(endTime) {
+    let startTime = this.state.startTime;
+    console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
+    // Ask user for description of the time slice.
+    let description = prompt("Journal entry for the time slice from " + new Date(startTime).toLocaleString() + " until " + new Date(endTime).toLocaleString());
+    this.storeEntry(startTime, endTime, description, this.getTags(description));
+    startTime = new Date(endTime);
+    this.setState({startTime: startTime.getTime()});
+    window.localStorage["startTime"] = startTime.getTime();
+    window.localStorage["startTimeString"] = startTime.toLocaleString();
+    this.exportData();
+  };
+
   render() {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
@@ -67,18 +80,7 @@ class App extends Component {
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
     const hoursArray = hours.map((entry,index) => {
-      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onclick={function(endTime) {
-        let startTime = this.state.startTime;
-        console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
-        // Ask user for description of the time slice.
-        let description = prompt("Journal entry for the time slice from " + new Date(startTime).toLocaleString() + " until " + new Date(endTime).toLocaleString());
-        this.storeEntry(startTime, endTime, description, this.getTags(description));
-        startTime = new Date(endTime);
-        this.setState({startTime: startTime.getTime()});
-        window.localStorage["startTime"] = startTime.getTime();
-        window.localStorage["startTimeString"] = startTime.toLocaleString();
-        this.exportData();
-      }.bind(this)}/>
+      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onclick={this.uponSlicingTime.bind(this)}/>
     });
     return (
       // https://stackoverflow.com/a/37379388
