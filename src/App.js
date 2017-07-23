@@ -69,16 +69,16 @@ class App extends Component {
     const hoursArray = hours.map((entry,index) => {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onclick={function(endTime) {
         let startTime = this.state.startTime;
-        console.log("Sliced at " + endTime + " from " + startTime);
+        console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
         // Ask user for description of the time slice.
         let description = prompt("Journal entry for the time slice from " + new Date(startTime).toLocaleString() + " until " + new Date(endTime).toLocaleString());
         this.storeEntry(startTime, endTime, description, this.getTags(description));
-        startTime = new Date();
+        startTime = new Date(endTime);
         this.setState({startTime: startTime.getTime()});
         window.localStorage["startTime"] = startTime.getTime();
         window.localStorage["startTimeString"] = startTime.toLocaleString();
         this.exportData();
-      }}/>
+      }.bind(this)}/>
     });
     return (
       // https://stackoverflow.com/a/37379388
@@ -125,7 +125,7 @@ class App extends Component {
       tagsList.add(item);
     });
     tagsList = Array.from(tagsList);
-    console.log("All tags:", tagsList);
+    // console.log("All tags:", tagsList);
     window.localStorage["tagsList"] = JSON.stringify(tagsList);
 
     // Add to times for each tag
