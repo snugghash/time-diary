@@ -72,11 +72,11 @@ class App extends Component {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} />
+      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} onclick={this.uponSlicingTime.bind(this)}/>
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
     const minutesArray = minutes.map((entry,index) => {
-      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} />
+      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onclick={this.uponSlicingTime.bind(this)}/>
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
     const hoursArray = hours.map((entry,index) => {
@@ -197,7 +197,7 @@ class Second extends Component {
   render() {
     let secondHeight = 1;
     return (
-      <div className="Second" style={{height:secondHeight + "px"}}>
+      <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}}>
       </div>
     );
   }
@@ -207,7 +207,7 @@ class Minute extends Component {
   render() {
     const minuteHeight = 20;
     return (
-      <div className="Minute" style={{height:minuteHeight+ "px"}}>
+      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}}>
       {new Date(this.props.time).toLocaleString()}
       </div>
     );
