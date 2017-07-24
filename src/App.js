@@ -3,6 +3,7 @@ import './css/Second.css';
 import './css/Minute.css';
 import './css/Hour.css';
 
+
 class App extends Component {
   constructor() {
     super();
@@ -76,7 +77,7 @@ class App extends Component {
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
     const minutesArray = minutes.map((entry,index) => {
-      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onclick={this.uponSlicingTime.bind(this)}/>
+      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onclick={this.uponSlicingTime.bind(this)} uponSlicingTime={this.uponSlicingTime}/>
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
     const hoursArray = hours.map((entry,index) => {
@@ -203,16 +204,45 @@ class Second extends Component {
   }
 }
 
+
 class Minute extends Component {
+  constructor() {
+    super();
+    this.state = {
+      split: false,
+    };
+  }
+
   render() {
     const minuteHeight = 20;
-    return (
-      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}}>
-      {new Date(this.props.time).toLocaleString()}
+    const minuteEle = (
+      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}} onClick={() => {this.setState(prevState => ({
+        split: !prevState.split
+      }));
+      }}>
+        {new Date(this.props.time).toLocaleString()}
       </div>
     );
+    if(this.state.split === true) {
+      const seconds = Array.apply(null, {length: 60}).map(Number.call, Number)
+      const secondsArray = seconds.map((entry,index) => {
+        return <Second key={index} time={this.props.time - 1000*(index)} onclick={this.props.uponSlicingTime.bind(this)}/>
+      });
+      return (
+        <div style={{display:"block"}}>
+          {minuteEle}
+          <div style={{float:"right", width:"50%"}}>
+            {secondsArray}
+          </div>
+        </div>
+      );
+    }
+    else {
+      return minuteEle;
+    }
   }
 }
+
 
 class Hour extends Component {
   render() {
