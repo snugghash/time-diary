@@ -61,6 +61,9 @@ class App extends Component {
     console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
     // Ask user for description of the time slice.
     let description = prompt("Journal entry for the time slice from " + new Date(startTime).toLocaleString() + " until " + new Date(endTime).toLocaleString());
+    if (description === null) {
+      return;
+    }
     this.storeEntry(startTime, endTime, description, this.getTags(description));
     startTime = new Date(endTime);
     this.setState({startTime: startTime.getTime()});
