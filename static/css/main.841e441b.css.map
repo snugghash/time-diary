@@ -1,1 +1,0 @@
-{"version":3,"sources":["css/Second.css"],"names":[],"mappings":"AAAA,QACE,sBACA,YACA,aACA,WACA,qBAAuB","file":"static/css/main.841e441b.css","sourcesContent":[".Second {\n  background-color: #999;\n  height: 50px;\n  padding: 20px;\n  color: white;\n  border: 1px solid #222;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/css/Second.css"],"sourceRoot":""}
