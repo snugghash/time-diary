@@ -221,11 +221,14 @@ class Minute extends Component {
   render() {
     const minuteHeight = 20;
     const minuteEle = (
-      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)} onClick={() => {this.setState(prevState => ({
-        split: !prevState.split
-      }));
+      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}
+      onClick={() => {this.setState(
+        prevState => ({split: !prevState.split}));
       }}>
         {new Date(this.props.time).toLocaleString()}
+        <div className="Split" style={{width:"33%", "fontSize":"0.75em"}} >
+          Split
+        </div>
       </div>
     );
     if(this.state.split === true) {
@@ -234,11 +237,11 @@ class Minute extends Component {
         return <Second key={index} time={this.props.time - 1000*(index)} onSlice={this.props.onSlice}/>
       });
       return (
-        <div style={{display:"block"}}>
-          {minuteEle}
-          <div style={{float:"right", width:"50%"}}>
-            {secondsArray}
-          </div>
+        <div>
+        {minuteEle}
+        <div style={{width:"50%", margin:"0 auto"}}>
+          {secondsArray}
+        </div>
         </div>
       );
     }
