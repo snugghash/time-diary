@@ -28,6 +28,8 @@ class App extends Component {
       numberOfMonths: null,
       numberOfYears: null
     };
+
+    this.uponSlicingTime = this.uponSlicingTime.bind(this);
   }
 
   getInitialState() {
@@ -76,15 +78,15 @@ class App extends Component {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} onclick={this.uponSlicingTime.bind(this)}/>
+      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} onSlice={this.uponSlicingTime}/>
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
     const minutesArray = minutes.map((entry,index) => {
-      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onclick={this.uponSlicingTime.bind(this)} uponSlicingTime={this.uponSlicingTime}/>
+      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onSlice={this.uponSlicingTime} />
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
     const hoursArray = hours.map((entry,index) => {
-      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onclick={this.uponSlicingTime.bind(this)}/>
+      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
     return (
       // https://stackoverflow.com/a/37379388
@@ -201,7 +203,7 @@ class Second extends Component {
   render() {
     let secondHeight = 1;
     return (
-      <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}}>
+      <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)}>
       </div>
     );
   }
@@ -219,7 +221,7 @@ class Minute extends Component {
   render() {
     const minuteHeight = 20;
     const minuteEle = (
-      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}} onClick={() => {this.setState(prevState => ({
+      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)} onClick={() => {this.setState(prevState => ({
         split: !prevState.split
       }));
       }}>
@@ -229,7 +231,7 @@ class Minute extends Component {
     if(this.state.split === true) {
       const seconds = Array.apply(null, {length: 60}).map(Number.call, Number)
       const secondsArray = seconds.map((entry,index) => {
-        return <Second key={index} time={this.props.time - 1000*(index)} onclick={this.props.uponSlicingTime.bind(this)}/>
+        return <Second key={index} time={this.props.time - 1000*(index)} onSlice={this.props.onSlice}/>
       });
       return (
         <div style={{display:"block"}}>
@@ -251,7 +253,7 @@ class Hour extends Component {
   render() {
     const hourHeight = 50;
     return (
-      <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={() => {this.props.onclick(this.props.time)}}>
+      <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
       {new Date(this.props.time).toLocaleString()}
       </div>
     );
