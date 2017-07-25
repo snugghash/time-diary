@@ -221,12 +221,14 @@ class Minute extends Component {
   render() {
     const minuteHeight = 20;
     const minuteEle = (
-      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}
+      <div style={{position: "relative"}}>
+      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
+        {new Date(this.props.time).toLocaleString()}
+      </div>
+        <div className="Split" style={{position:"absolute", top:"0", left:"0", width:"33%", "fontSize":"0.75em", backgroundColor:"#08f"}}
       onClick={() => {this.setState(
         prevState => ({split: !prevState.split}));
       }}>
-        {new Date(this.props.time).toLocaleString()}
-        <div className="Split" style={{width:"33%", "fontSize":"0.75em"}} >
           Split
         </div>
       </div>
