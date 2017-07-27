@@ -255,13 +255,44 @@ class Minute extends Component {
 
 
 class Hour extends Component {
+  constructor() {
+    super();
+    this.state = {
+      split: false,
+    };
+  }
   render() {
     const hourHeight = 50;
-    return (
-      <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
-      {new Date(this.props.time).toLocaleString()}
+    const hourEle = (
+      <div style={{position: "relative"}}>
+        <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
+        {new Date(this.props.time).toLocaleString()}
+        </div>
+        <div className="Split" style={{position:"absolute", top:"0", left:"0", width:"33%", "fontSize":"0.75em", backgroundColor:"#08f"}}
+      onClick={() => {this.setState(
+        prevState => ({split: !prevState.split}));
+      }}>
+          Split
+        </div>
       </div>
     );
+    if(this.state.split === true) {
+      const minutes = Array.apply(null, {length: 60}).map(Number.call, Number)
+      const array = minutes.map((entry,index) => {
+        return <Minute key={index} time={this.props.time - 60000*(index)} onSlice={this.props.onSlice}/>
+      });
+      return (
+        <div>
+        {hourEle}
+        <div style={{width:"50%", margin:"0 auto"}}>
+          {array}
+        </div>
+        </div>
+      );
+    }
+    else {
+      return hourEle;
+    }
   }
 }
 
