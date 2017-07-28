@@ -4,15 +4,15 @@ if (Modernizr.localstorage) {
   // no native support for HTML5 storage :(
   // maybe try dojox.storage or a third-party solution
 }
-let s = Snap("#timeSVG");
-let timeSVG = $('#timeSVG');
+//let s = Snap("#timeSVG");
+//let timeSVG = $('#timeSVG');
 
 const secondHeight = 10;
 const minuteHeight = 20;
 const hourHeight = 50;
 const dayHeight = 100;
 
-let bigCircle = s.circle(150, 150, dayHeight); // TODO fix in beta, starting and ending UX to be better
+//let bigCircle = s.circle(150, 150, dayHeight); // TODO fix in beta, starting and ending UX to be better
 let isTracking = (function() {
   if(window.localStorage.getItem("isTracking") === null) {
     window.localStorage["isTracking"] = JSON.stringify(false);
@@ -93,7 +93,7 @@ let getTags = function (description) {
   });
 };
 
-bigCircle.click(function(f) {
+let bigCircleOnClick = function(f) {
   if(isTracking==true) {
     isTracking=false;
     window.localStorage["isTracking"] = JSON.stringify(false);
@@ -112,7 +112,7 @@ bigCircle.click(function(f) {
   textStartDisplay = s.text(250,150, window.localStorage["startTimeString"]);
   moveDownGroup = s.group(textStartDisplay);
   updateTimeStepCaller = setInterval(updateTimeStep,1000);
-});
+};
 
 /*
  * Functions to call every time step
