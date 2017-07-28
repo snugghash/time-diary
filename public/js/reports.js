@@ -31,7 +31,7 @@ let chart = {
       "name": "xscale",
       "type": "band",
       "domain": {"data": "Tag times", "field": "tag"},
-      "range": "width",
+      "range": {"step": 60},
       "padding": 0.05,
       "round": true
     },
