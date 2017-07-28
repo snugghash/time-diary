@@ -16,6 +16,8 @@ class App extends Component {
       else return JSON.parse(window.localStorage[variable]);
     };
 
+    this.exportData();
+
     this.state = {
       tracking: true,
       startTime: inLocalStorage("startTime", new Date().getTime()),
