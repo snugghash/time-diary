@@ -16,6 +16,9 @@ class App extends Component {
       else return JSON.parse(window.localStorage[variable]);
     };
 
+    // Prevent error upon passing null to jsonArrToCsv
+    inLocalStorage("entries", []);
+
     this.exportData();
 
     this.state = {
@@ -23,12 +26,6 @@ class App extends Component {
       startTime: inLocalStorage("startTime", new Date().getTime()),
       endTime: null,
       trackedTime: null,
-      numberOfSeconds: null,
-      numberOfMinutes: null,
-      numberOfHours: null,
-      numberOfDays: null,
-      numberOfMonths: null,
-      numberOfYears: null
     };
 
     this.uponSlicingTime = this.uponSlicingTime.bind(this);
