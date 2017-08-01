@@ -65,7 +65,7 @@ class App extends Component {
     if (description === null) {
       return;
     }
-    this.storeEntry(startTime, endTime, description, this.getTags(description));
+    this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
     startTime = new Date(endTime);
     this.setState({startTime: startTime.getTime()});
     window.localStorage["startTime"] = startTime.getTime();
