@@ -64,6 +64,9 @@ class App extends Component {
     let description = prompt("Journal entry for the time slice from " + new Date(startTime).toLocaleString() + " until " + new Date(endTime).toLocaleString());
     if (description === null) {
       return;
+    } else {
+      // Sanitize description
+      description = description.replace(/"/g, '\x22');
     }
     this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
     startTime = new Date(endTime);
