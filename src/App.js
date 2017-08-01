@@ -160,11 +160,17 @@ class App extends Component {
    * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
    */
   getTags = function (description) {
-    return description.split(" ").filter(function (word) {
+    let endTags = description.split(" ").filter(function (word) {
       return word.slice(-1) === ";";
     }).map(function (word) {
       return word.slice(0, -1);
     });
+    let startTags = description.split(" ").filter(function (word) {
+      return word.charAt(0) === "#";
+    }).map(function (word) {
+      return word.slice(1);
+    });
+    return [...new Set([...endTags, startTags])]
   };
 
   /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
