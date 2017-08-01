@@ -295,7 +295,16 @@ $('#importData').on('change', function() {
       else {
         entries = JSON.parse(window.localStorage["entries"]);
       }
-      entries = [...new Set([...entries, ...jsonArr])];
+      for(let j=0; j < jsonArr.length; j++) {
+        temp = {
+          startTime: parseInt(jsonArr[j][0]),
+          endTime: parseInt(jsonArr[j][1]),
+          description: jsonArr[j][2],
+          tags: jsonArr[j].slice(3)
+        };
+        entries.push(temp);
+      }
+      entries = [...new Set(entries)];
       console.log(entries);
     };
     r.readAsText(file);
