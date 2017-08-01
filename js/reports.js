@@ -16,7 +16,7 @@ else {
 
 let chart = {
   "$schema": "https://vega.github.io/schema/vega/v3.0.json",
-  "width": 400,
+  "width": timedTags.length*10,
   "height": 200,
   "padding": 5,
   "autosize": "pad",
@@ -31,7 +31,7 @@ let chart = {
       "name": "xscale",
       "type": "band",
       "domain": {"data": "Tag times", "field": "tag"},
-      "range": "width",
+      "range": {"step": 60},
       "padding": 0.05,
       "round": true
     },
