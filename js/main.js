@@ -295,7 +295,7 @@ $('#importData').on('change', function() {
       else {
         entries = JSON.parse(window.localStorage["entries"]);
       }
-      for(let j=0; j < jsonArr.length; j++) {
+      for(let j=0; j < jsonArr.length - 1; j++) {
         temp = {
           startTime: parseInt(jsonArr[j][0]),
           endTime: parseInt(jsonArr[j][1]),
