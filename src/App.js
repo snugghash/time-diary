@@ -51,7 +51,7 @@ class App extends Component {
       this.setState({
         numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000)%60,
         numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000)%60,
-        numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000)%24,
+        numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000),
         trackedTime: new Date().getTime() - this.state.startTime,
       });
     }
