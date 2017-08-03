@@ -173,7 +173,8 @@ class App extends Component {
     }).map(function (word) {
       return word.slice(1);
     });
-    return [...new Set([...endTags, startTags])]
+    // console.log(new Set([...endTags], [...startTags])); // TODO convert to test
+    return [...new Set([...endTags], [...startTags])]
   };
 
   /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
