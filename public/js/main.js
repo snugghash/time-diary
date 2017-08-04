@@ -324,6 +324,11 @@ $('#importData').on('change', function() {
       }
       entries = [...new Set(entries)];
       console.log(entries);
+      importConfirm = prompt("Check log output, import?");
+      if (importConfirm == "true") {
+        console.log("Imported!");
+        window.localStorage["entries"] = JSON.stringify(entries);
+      }
     };
     r.readAsText(file);
   }
