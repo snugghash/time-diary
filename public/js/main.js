@@ -307,6 +307,16 @@ $('#importData').on('change', function() {
           if(entries[k].startTime == temp.startTime &&
              entries[k].endTime == temp.endTime) {
             exists = true;
+            // Cover all possible formats in importing
+            // TODO export to func, improve func to NLP
+            if (entries[k].description == '"' + temp.description + '"') {
+            }
+            else if (entries[k].description == temp.description) {
+            }
+            else {
+              entries[k].description = entries[k].description.slice(0,-1) + temp.description + '"';
+              console.log("Same time slice, different description, finally:", entries[k].description);
+            }
           }
         }
         if(exists == false)
