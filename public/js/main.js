@@ -296,13 +296,21 @@ $('#importData').on('change', function() {
         entries = JSON.parse(window.localStorage["entries"]);
       }
       for(let j=0; j < jsonArr.length - 1; j++) {
+        let exists = false;
         temp = {
           startTime: parseInt(jsonArr[j][0]),
           endTime: parseInt(jsonArr[j][1]),
           description: jsonArr[j][2],
           tags: jsonArr[j].slice(3)
         };
-        entries.push(temp);
+        for (let k=0; k < entries.length; k++) {
+          if(entries[k].startTime == temp.startTime &&
+             entries[k].endTime == temp.endTime) {
+            exists = true;
+          }
+        }
+        if(exists == false)
+          entries.push(temp);
       }
       entries = [...new Set(entries)];
       console.log(entries);
