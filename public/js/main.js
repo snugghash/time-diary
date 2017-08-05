@@ -314,7 +314,7 @@ $('#importData').on('change', function() {
             else if (entries[k].description == temp.description) {
             }
             else {
-              entries[k].description = entries[k].description.slice(0,-1) + temp.description + '"';
+              entries[k].description = entries[k].description.slice(0,-1) +" "+ temp.description + '"';
               console.log("Same time slice, different description, finally:", entries[k].description);
             }
           }
