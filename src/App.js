@@ -7,23 +7,16 @@ import './css/Hour.css';
 class App extends Component {
   constructor() {
     super();
-    // Copy values from localStorage
-    let inLocalStorage = function(variable, defaultValue) {
-      if(window.localStorage.getItem(variable) === null) {
-        window.localStorage[variable] = JSON.stringify(defaultValue);
-        return defaultValue;
-      }
-      else return JSON.parse(window.localStorage[variable]);
-    };
+
 
     // Prevent error upon passing null to jsonArrToCsv
-    inLocalStorage("entries", []);
+    this.inLocalStorage("entries", []);
 
     this.exportData();
 
     this.state = {
       tracking: true,
-      startTime: inLocalStorage("startTime", new Date().getTime()),
+      startTime: this.inLocalStorage("startTime", new Date().getTime()),
       endTime: null,
       trackedTime: null,
     };
@@ -49,6 +42,7 @@ class App extends Component {
   tick() {
     if(this.state.tracking) {
       this.setState({
+        startTime: this.inLocalStorage("startTime", new Date().getTime()),
         numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000)%60,
         numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000)%60,
         numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000),
@@ -99,6 +93,19 @@ class App extends Component {
       </div>
     );
   }
+
+
+  /*
+   * Copy values from localStorage, if empty, store in defaultValue and return it.
+   */
+  inLocalStorage = function(variable, defaultValue) {
+    if(window.localStorage.getItem(variable) === null) {
+      window.localStorage[variable] = JSON.stringify(defaultValue);
+      return defaultValue;
+    }
+    else return JSON.parse(window.localStorage[variable]);
+  };
+
 
   /**
    * Store given time slice data into localStorage
