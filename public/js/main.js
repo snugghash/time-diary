@@ -324,7 +324,7 @@ $('#importData').on('change', function() {
       }
       entries = [...new Set(entries)];
       console.log(entries);
-      importConfirm = prompt("Check log output, import?");
+      importConfirm = prompt("Check log output, import? true/false");
       if (importConfirm == "true") {
         console.log("Imported!");
         window.localStorage["entries"] = JSON.stringify(entries);
