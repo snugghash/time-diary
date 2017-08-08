@@ -19,6 +19,7 @@ class App extends Component {
       startTime: this.inLocalStorage("startTime", new Date().getTime()),
       endTime: null,
       trackedTime: null,
+      showPastUntil: this.inLocalStorage("startTime", new Date().getTime()) - 3600000,
     };
 
     this.uponSlicingTime = this.uponSlicingTime.bind(this);
@@ -84,12 +85,26 @@ class App extends Component {
     const hoursArray = hours.map((entry,index) => {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
+    let entries = this.inLocalStorage("entries", null).filter((entry) => (entry.endTime > this.state.showPastUntil));
+    const pastArray = entries.map((entry, index) => {
+      return <p key={entry.startTime}>{new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()} {entry.description}</p>;
+    });
     return (
       // https://stackoverflow.com/a/37379388
       <div>
         {secondsArray}
         {minutesArray}
         {hoursArray}
+        <h3>Past</h3>
+        <button onClick={() => {this.setState(
+          prevState => ({showPastUntil: prevState.showPastUntil + 3600000})
+        );}} >Load less</button>
+        <button onClick={() => {this.setState(
+          prevState => {
+            return {showPastUntil: prevState.showPastUntil - 3600000};
+          }
+        );}} >Load more</button>
+        {pastArray}
       </div>
     );
   }
