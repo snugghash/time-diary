@@ -90,7 +90,7 @@ class App extends Component {
       return (
         <p key={entry.startTime}>
           {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
-          <EditableTimeSlice desc={entry.description} />
+          <EditableTimeSlice index={index} desc={entry.description} onChange={this.editPastDesc.bind(null, )}/>
         </p>
       );
     });
@@ -114,6 +114,13 @@ class App extends Component {
     );
   }
 
+  /**
+   * Bound function that updates the specified entry's description.
+   */
+  editPastDesc = function (newDesc) {
+
+    return null;
+  };
 
   /*
    * Copy values from localStorage, if empty, store in defaultValue and return it.
