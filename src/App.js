@@ -87,7 +87,12 @@ class App extends Component {
     });
     let entries = this.inLocalStorage("entries", null).filter((entry) => (entry.endTime > this.state.showPastUntil));
     const pastArray = entries.map((entry, index) => {
-      return <p key={entry.startTime}>{new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()} {entry.description}</p>;
+      return (
+        <p key={entry.startTime}>
+          {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
+          <EditableTimeSlice desc={entry.description} />
+        </p>
+      );
     });
     return (
       // https://stackoverflow.com/a/37379388
@@ -236,6 +241,30 @@ class Second extends Component {
     return (
       <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)}>
       </div>
+    );
+  }
+}
+
+
+class EditableTimeSlice extends Component {
+  constructor() {
+    super();
+    this.state = {
+      desc: "",
+    };
+  }
+
+  componentWillMount() {
+    this.setState({desc: this.props.desc});
+  }
+
+  handleChange (e) {
+    this.setState({[e.target.name]: e.target.value})
+  };
+
+  render() {
+    return (
+      <input type="text" name="desc" onChange={(e) => this.handleChange(e)} value={this.state.desc}/>
     );
   }
 }
