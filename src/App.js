@@ -85,8 +85,11 @@ class App extends Component {
     const hoursArray = hours.map((entry,index) => {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
-    let entries = this.inLocalStorage("entries", null).filter((entry) => (entry.endTime > this.state.showPastUntil));
+    let entries = this.inLocalStorage("entries", null)
     const pastArray = entries.map((entry, index) => {
+      if (entry.endTime < this.state.showPastUntil) {
+        return ;
+      }
       return (
         <p key={entry.startTime}>
           {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
@@ -117,8 +120,10 @@ class App extends Component {
   /**
    * Bound function that updates the specified entry's description.
    */
-  editPastDesc = function (newDesc) {
-
+  editPastDesc = function (newDesc, index) {
+    let entries = this.inLocalStorage("entries", null)
+    entries[index].description = newDesc;
+    window.localStorage["entries"] = JSON.stringify(entries);
     return null;
   };
 
@@ -267,6 +272,7 @@ class EditableTimeSlice extends Component {
 
   handleChange (e) {
     this.setState({[e.target.name]: e.target.value})
+    this.props.editPastDesc(e.target.value, this.props.index); // Send the index within entries array and the new description to overwrite the found entry's description.
   };
 
   render() {
