@@ -88,12 +88,12 @@ class App extends Component {
     let entries = this.inLocalStorage("entries", null)
     const pastArray = entries.map((entry, index) => {
       if (entry.endTime < this.state.showPastUntil) {
-        return ;
+        return <div/>;
       }
       return (
         <p key={entry.startTime}>
           {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
-          <EditableTimeSlice index={index} desc={entry.description} onChange={this.editPastDesc.bind(null, )}/>
+          <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(null, null, index)}/>
         </p>
       );
     });
@@ -272,7 +272,7 @@ class EditableTimeSlice extends Component {
 
   handleChange (e) {
     this.setState({[e.target.name]: e.target.value})
-    this.props.editPastDesc(e.target.value, this.props.index); // Send the index within entries array and the new description to overwrite the found entry's description.
+    this.props.editPastDesc(e.target.value); // Send the new description to overwrite the found entry's description.
   };
 
   render() {
