@@ -88,12 +88,12 @@ class App extends Component {
     let entries = this.inLocalStorage("entries", null)
     const pastArray = entries.map((entry, index) => {
       if (entry.endTime < this.state.showPastUntil) {
-        return <div/>;
+        return <div key={entry.startTime}/>;
       }
       return (
         <p key={entry.startTime}>
           {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
-          <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(null, null, index)}/>
+          <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
         </p>
       );
     });
@@ -120,7 +120,7 @@ class App extends Component {
   /**
    * Bound function that updates the specified entry's description.
    */
-  editPastDesc = function (newDesc, index) {
+  editPastDesc = function (index, newDesc) {
     let entries = this.inLocalStorage("entries", null)
     entries[index].description = newDesc;
     window.localStorage["entries"] = JSON.stringify(entries);
@@ -264,6 +264,7 @@ class EditableTimeSlice extends Component {
     this.state = {
       desc: "",
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount() {
@@ -271,13 +272,13 @@ class EditableTimeSlice extends Component {
   }
 
   handleChange (e) {
-    this.setState({[e.target.name]: e.target.value})
-    this.props.editPastDesc(e.target.value); // Send the new description to overwrite the found entry's description.
+    this.setState({[e.target.name]: e.target.value});
+    this.props.onChange(e.target.value); // Send the new description to overwrite the found entry's description.
   };
 
   render() {
     return (
-      <input type="text" name="desc" onChange={(e) => this.handleChange(e)} value={this.state.desc}/>
+      <input type="text" name="desc" onChange={this.handleChange} value={this.state.desc}/>
     );
   }
 }
