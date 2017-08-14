@@ -10,16 +10,16 @@ class App extends Component {
 
 
     // Prevent error upon passing null to jsonArrToCsv
-    this.inLocalStorage("entries", []);
+    this.retrieve_or_storeDefault_in_localStorage("entries", []);
 
     this.exportData();
 
     this.state = {
       tracking: true,
-      startTime: this.inLocalStorage("startTime", new Date().getTime()),
+      startTime: this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime()),
       endTime: null,
       trackedTime: null,
-      showPastUntil: this.inLocalStorage("startTime", new Date().getTime()) - 3600000,
+      showPastUntil: this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime()) - 3600000,
     };
 
     this.uponSlicingTime = this.uponSlicingTime.bind(this);
@@ -43,7 +43,7 @@ class App extends Component {
   tick() {
     if(this.state.tracking) {
       this.setState({
-        startTime: this.inLocalStorage("startTime", new Date().getTime()),
+        startTime: this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime()),
         numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000)%60,
         numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000)%60,
         numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000),
@@ -85,7 +85,7 @@ class App extends Component {
     const hoursArray = hours.map((entry,index) => {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
-    let entries = this.inLocalStorage("entries", null)
+    let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
     const pastArray = entries.map((entry, index) => {
       if (entry.endTime < this.state.showPastUntil) {
         return <div key={entry.startTime}/>;
@@ -121,7 +121,7 @@ class App extends Component {
    * Bound function that updates the specified entry's description.
    */
   editPastDesc = function (index, newDesc) {
-    let entries = this.inLocalStorage("entries", null)
+    let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
     entries[index].description = newDesc;
     window.localStorage["entries"] = JSON.stringify(entries);
     return null;
@@ -130,7 +130,7 @@ class App extends Component {
   /*
    * Copy values from localStorage, if empty, store in defaultValue and return it.
    */
-  inLocalStorage = function(variable, defaultValue) {
+  retrieve_or_storeDefault_in_localStorage = function(variable, defaultValue) {
     if(window.localStorage.getItem(variable) === null) {
       window.localStorage[variable] = JSON.stringify(defaultValue);
       return defaultValue;
