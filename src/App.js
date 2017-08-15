@@ -52,17 +52,28 @@ class App extends Component {
     }
   }
 
-  uponSlicingTime(endTime) {
-    let startTime = this.state.startTime;
-    console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
-    // Ask user for description of the time slice.
+  /* Ask user for description of time slice, sanitize description.
+   * TODO UX
+   */
+  getDescription(startTime, endTime) {
     let description = prompt("Journal entry for the time slice from " + new Date(startTime).toLocaleString() + " until " + new Date(endTime).toLocaleString());
     if (description === null) {
-      return;
+      return description;
     } else {
       // Sanitize description
       description = description.replace(/"/g, '\x22');
     }
+    return description;
+  }
+
+  uponSlicingTime(endTime, event) {
+    console.log(event.clientY);
+    let startTime = this.state.startTime;
+    console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
+    // Ask user for description of the time slice.
+    let description = this.getDescription(startTime, endTime);
+    if (description === null)
+      return;
     this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
     startTime = new Date(endTime);
     this.setState({startTime: startTime.getTime()});
@@ -198,7 +209,7 @@ class App extends Component {
   };
 
   /**
-   * Parse the tags out from the text description, rn just words ending with ';' 
+   * Parse the tags out from the text description, rn just words ending with ';'
    * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
    */
   getTags = function (description) {
