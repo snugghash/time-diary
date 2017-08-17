@@ -23,6 +23,7 @@ class App extends Component {
     };
 
     this.uponSlicingTime = this.uponSlicingTime.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
 
   getInitialState() {
@@ -50,6 +51,34 @@ class App extends Component {
         trackedTime: new Date().getTime() - this.state.startTime,
       });
     }
+  }
+
+  /*
+   * If already selected, find the range and slice time.
+   */
+  onSelect(selectedTime1, sizeOfBlock) {
+    let selectedTime2 = this.retrieve_or_storeDefault_in_localStorage("selectedTime");
+    // Hack to see if one time was already selceted
+    if(selectedTime1 == selectedTime2) {
+      // First selected time, TODO UX
+      return;
+    }
+    // Get direction of time slice
+    if(selectedTime1 > selectedTime2) {
+      var startTime = selectedTime2;
+      var endTime = selectedTime1;
+    }
+    // We now have two times, get the full time slice
+    console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
+    // Ask user for description of the time slice.
+    let description = this.getDescription(startTime, endTime);
+    if (description === null)
+      return;
+    this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
+    this.exportData();
+    // Remove from localStorage
+    window.localStorage.removeItem("selectedTime");
+    // TODO do something about the gap in recorded time left by this. Or compensate for it when making the "startTime" to ending slices. Or leave it that way for overarching stuff. TOTHINK
   }
 
   /* Ask user for description of time slice, sanitize description.
