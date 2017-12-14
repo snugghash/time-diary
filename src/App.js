@@ -59,7 +59,7 @@ class App extends Component {
   onSelect(selectedTime1, sizeOfBlock) {
     let selectedTime2 = this.retrieve_or_storeDefault_in_localStorage("selectedTime");
     // Hack to see if one time was already selceted
-    if(selectedTime1 == selectedTime2) {
+    if(selectedTime1 === selectedTime2) {
       // First selected time, TODO UX
       return;
     }
@@ -340,9 +340,10 @@ class Minute extends Component {
         {new Date(this.props.time).toLocaleString()}
       </div>
         <div className="Split" style={{position:"absolute", top:"0", left:"0", width:"33%", "fontSize":"0.75em", backgroundColor:"#08f"}}
-      onClick={() => {this.setState(
-        prevState => ({split: !prevState.split}));
-      }}>
+          onClick={() => {this.setState(
+            prevState => ({split: !prevState.split})
+          );}}
+        >
           Split
         </div>
       </div>
