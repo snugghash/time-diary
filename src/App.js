@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './css/Second.css';
 import './css/Minute.css';
 import './css/Hour.css';
+import './css/Split.css';
 
 
 class App extends Component {
@@ -298,6 +299,17 @@ class Second extends Component {
 }
 
 
+class Split extends Component {
+  render() {
+    return (
+      <div className="Split" onClick={this.props.onClick}>
+        Split
+      </div>
+    );
+  }
+}
+
+
 class EditableTimeSlice extends Component {
   constructor() {
     super();
@@ -339,13 +351,11 @@ class Minute extends Component {
       <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
       </div>
-        <div className="Split" style={{position:"absolute", top:"0", left:"0", width:"33%", "fontSize":"0.75em", backgroundColor:"#08f"}}
+        <Split
           onClick={() => {this.setState(
             prevState => ({split: !prevState.split})
           );}}
-        >
-          Split
-        </div>
+        />
       </div>
     );
     if(this.state.split === true) {
@@ -383,12 +393,11 @@ class Hour extends Component {
         <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
         </div>
-        <div className="Split" style={{position:"absolute", top:"0", left:"0", width:"33%", "fontSize":"0.75em", backgroundColor:"#08f"}}
-      onClick={() => {this.setState(
-        prevState => ({split: !prevState.split}));
-      }}>
-          Split
-        </div>
+        <Split
+          onClick={() => {this.setState(
+            prevState => ({split: !prevState.split}));
+          }}
+        />
       </div>
     );
     if(this.state.split === true) {

@@ -1,0 +1,12 @@
+.Split {
+  position: absolute;
+  top: 0em;
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 0.75em;
+  width: 20%;
+  /*line-height: 0.75em;*/
+  /*height: 100%;*/
+  border: 1px solid #dd0;
+  background-color: #aa5;
+}
