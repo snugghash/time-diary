@@ -64,19 +64,28 @@ class App extends Component {
   onSelect(selectedTime1, sizeOfBlock) {
     console.log("Selected time1 ", selectedTime1);
     this.setState(
-      prevState => {{selected: !(prevState.selected)}}
+      prevState => {
+        console.log("Selected time", selectedTime1);
+        if(prevState.selected === false) {
+
+          return {selected: !(prevState.selected),
+            selectedTime1: selectedTime1,
+          };
+        }
+        else {
+          return {selected: !(prevState.selected),
+            selectedTime2: selectedTime1,
+          };
+        }
+      }
     );
-    if(this.state.selected == false) {
-      this.setState({
-        selected: true,
-        selectedTime1: selectedTime1,
-      })
-    }
     return;
     let selectedTime2 = this.retrieve_or_storeDefault_in_localStorage("selectedTime");
     // Hack to see if one time was already selceted
     if(selectedTime1 === selectedTime2) {
       // First selected time, TODO UX
+      // TODO make this the way to call double click
+      console.log("Double click on same");
       return;
     }
     // Get direction of time slice
@@ -124,7 +133,7 @@ class App extends Component {
   }
 
   uponSlicingTime(endTime, event) {
-    console.log(event.clientY);
+    console.log("Mouse y position", event.clientY);
     let startTime = this.state.startTime;
     console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
     // Ask user for description of the time slice.
@@ -143,7 +152,12 @@ class App extends Component {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver}/>
+      let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)
+      let color = "#aaa"
+      if (elementTime < this.state.selectedTime2 && elementTime > this.state.selectedTime1) {
+        color = "#aae"
+      }
+      return <Second key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color}/>
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
     const minutesArray = minutes.map((entry,index) => {
@@ -317,9 +331,9 @@ class App extends Component {
 
 class Second extends Component {
   render() {
-    let secondHeight = 1;
+    let secondHeight = 0.1;
     return (
-      <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
+      <div className="Second" style={{height:secondHeight + "em", backgroundColor:this.props.color}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
       </div>
     );
   }
@@ -372,10 +386,10 @@ class Minute extends Component {
   }
 
   render() {
-    const minuteHeight = 20;
+    const minuteHeight = 2;
     const minuteEle = (
       <div style={{position: "relative"}}>
-      <div className="Minute" style={{height:minuteHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
+      <div className="Minute" style={{height:minuteHeight+ "em"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
       </div>
         <Split
@@ -414,10 +428,10 @@ class Hour extends Component {
     };
   }
   render() {
-    const hourHeight = 50;
+    const hourHeight = 5;
     const hourEle = (
       <div style={{position: "relative"}}>
-        <div className="Hour" style={{height:hourHeight+ "px"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
+        <div className="Hour" style={{height:hourHeight+ "em"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
         </div>
         <Split
