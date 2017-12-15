@@ -21,10 +21,14 @@ class App extends Component {
       endTime: null,
       trackedTime: null,
       showPastUntil: this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime()) - 3600000,
+      selected: false,
+      selectedTime1: null,
+      selectedTime2: null,
     };
 
     this.uponSlicingTime = this.uponSlicingTime.bind(this);
     this.onSelect = this.onSelect.bind(this);
+    this.onHoverOver = this.onHoverOver.bind(this);
   }
 
   getInitialState() {
@@ -58,6 +62,17 @@ class App extends Component {
    * If already selected, find the range and slice time.
    */
   onSelect(selectedTime1, sizeOfBlock) {
+    console.log("Selected time1 ", selectedTime1);
+    this.setState(
+      prevState => {{selected: !(prevState.selected)}}
+    );
+    if(this.state.selected == false) {
+      this.setState({
+        selected: true,
+        selectedTime1: selectedTime1,
+      })
+    }
+    return;
     let selectedTime2 = this.retrieve_or_storeDefault_in_localStorage("selectedTime");
     // Hack to see if one time was already selceted
     if(selectedTime1 === selectedTime2) {
@@ -81,6 +96,18 @@ class App extends Component {
     window.localStorage.removeItem("selectedTime");
     // TODO do something about the gap in recorded time left by this. Or compensate for it when making the "startTime" to ending slices. Or leave it that way for overarching stuff. TOTHINK
   }
+
+
+  onHoverOver(selectedTime2) {
+    if(this.state.selected) {
+      console.log("Hovering over ", selectedTime2);
+      this.setState({
+        selectedTime2: selectedTime2,
+      });
+    }
+    return;
+  }
+
 
   /* Ask user for description of time slice, sanitize description.
    * TODO UX
@@ -116,7 +143,7 @@ class App extends Component {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} onSlice={this.uponSlicingTime}/>
+      return <Second key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver}/>
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
     const minutesArray = minutes.map((entry,index) => {
@@ -292,7 +319,7 @@ class Second extends Component {
   render() {
     let secondHeight = 1;
     return (
-      <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)}>
+      <div className="Second" style={{height:secondHeight + "px"}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
       </div>
     );
   }
