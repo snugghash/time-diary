@@ -49,12 +49,13 @@ class App extends Component {
 
   tick() {
     if(this.state.tracking) {
+      let currentTime = new Date().getTime();
       this.setState({
         startTime: this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime()),
-        numberOfSeconds: Math.floor((new Date().getTime() - this.state.startTime)/1000)%60,
-        numberOfMinutes: Math.floor((new Date().getTime() - this.state.startTime)/60000)%60,
-        numberOfHours: Math.floor((new Date().getTime() - this.state.startTime)/3600000),
-        trackedTime: new Date().getTime() - this.state.startTime,
+        numberOfSeconds: Math.floor((currentTime - this.state.startTime)/1000)%60,
+        numberOfMinutes: Math.floor((currentTime - this.state.startTime)/60000)%60,
+        numberOfHours: Math.floor((currentTime - this.state.startTime)/3600000),
+        trackedTime: currentTime - this.state.startTime,
       });
     }
   }
@@ -169,8 +170,8 @@ class App extends Component {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
     //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
-    let entries = window.localStorage.getItem("entries")
-    let pastArray = null
+    let entries = JSON.parse(window.localStorage.getItem("entries"));
+    let pastArray = null;
     if(entries == null) {
       pastArray = (
         <p> No entries to display </p>
@@ -217,7 +218,7 @@ class App extends Component {
    */
   editPastDesc = function (index, newDesc) {
     //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
-    let entries = window.localStorage.getItem("entries")
+    let entries = JSON.parse(window.localStorage.getItem("entries"));
     entries[index].description = newDesc;
     window.localStorage["entries"] = JSON.stringify(entries);
     return null;

@@ -315,7 +315,7 @@ $('#importData').on('change', function() {
             }
             else {
               entries[k].description = entries[k].description.slice(0,-1) +" "+ temp.description + '"';
-              console.log("Same time slice, different description, finally:", entries[k].description);
+              console.log("Same time slice, different description; entry ", k, ", finally:", entries[k].description);
             }
           }
         }
