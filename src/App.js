@@ -228,7 +228,7 @@ class App extends Component {
    */
   retrieve_or_storeDefault_in_localStorage = function(variable, defaultValue) {
     if(window.localStorage.getItem(variable) === null) {
-      window.localStorage[variable] = JSON.stringify(defaultValue);
+      window.localStorage.setItem(variable, JSON.stringify(defaultValue));
       return defaultValue;
     }
     else return JSON.parse(window.localStorage[variable]);
