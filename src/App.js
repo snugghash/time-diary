@@ -190,6 +190,9 @@ class App extends Component {
     return (
       // https://stackoverflow.com/a/37379388
       <div>
+      <button onClick={() => {this.setState(
+        prevState => ({tracking: !prevState.tracking})
+      );}} > Start/stop </button>
         {secondsArray}
         {minutesArray}
         {hoursArray}

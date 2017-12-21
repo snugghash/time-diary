@@ -16,10 +16,10 @@ const dayHeight = 100;
 let isTracking = (function() {
   if(window.localStorage.getItem("isTracking") === null) {
     window.localStorage["isTracking"] = JSON.stringify(false);
-    return false; 
+    return false;
   }
   else return JSON.parse(window.localStorage["isTracking"]);
-})(); 
+})();
 var textStartDisplay, moveDownGroup, updateTimeStepCaller;
 
 /**
@@ -153,7 +153,7 @@ function appendElement(elementHeight) {
   });
   // Listen for time slice events.
   smallRect.node.ondblclick = function(event) {
-    endTime = new Date().getTime() - 1000*(event.target.attributes['y'].value - 150)/elementHeight; 
+    endTime = new Date().getTime() - 1000*(event.target.attributes['y'].value - 150)/elementHeight;
     startTime = localStorage["startTime"];
     console.log("Sliced at " + endTime + " from " + startTime);
     // Ask user for description of the time slice.
