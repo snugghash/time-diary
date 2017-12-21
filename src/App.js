@@ -168,17 +168,25 @@ class App extends Component {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
     let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
-    const pastArray = entries.map((entry, index) => {
-      if (entry.endTime < this.state.showPastUntil) {
-        return <div key={entry.startTime}/>;
-      }
-      return (
-        <p key={entry.startTime}>
+    let pastArray = null
+    if(entries == null) {
+      pastArray = (
+        <p> No entries to display </p>
+      );
+    }
+    else {
+      pastArray = entries.map((entry, index) => {
+        if (entry.endTime < this.state.showPastUntil) {
+          return <div key={entry.startTime}/>;
+        }
+        return (
+          <p key={entry.startTime}>
           {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
           <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
-        </p>
-      );
-    });
+          </p>
+        );
+      });
+    }
     return (
       // https://stackoverflow.com/a/37379388
       <div>
@@ -319,7 +327,12 @@ class App extends Component {
    * Credits: https://stackoverflow.com/questions/16428835/save-data-from-localstorage-to-csv#16430518
    */
   exportData = function () {
-    let trackedData = this.jsonArrToCsv(JSON.parse(localStorage.getItem("entries")));
+    let jsonDataArray = JSON.parse(localStorage.getItem("entries"));
+    if(jsonDataArray == null) {
+      // TODO tests for stuff like this?
+      return
+    }
+    let trackedData = this.jsonArrToCsv(jsonDataArray);
     var blob = new Blob([trackedData], {type: "text/csv"});
     var url = URL.createObjectURL(blob);
     var a = document.querySelector("#export-data"); // id of the <a> element to render the download link
