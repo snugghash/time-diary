@@ -11,7 +11,8 @@ class App extends Component {
 
 
     // Prevent error upon passing null to jsonArrToCsv
-    this.retrieve_or_storeDefault_in_localStorage("entries", []);
+    //this.retrieve_or_storeDefault_in_localStorage("entries", []);
+    //window.localStorage.getItem("entries")
 
     this.exportData();
 
@@ -167,7 +168,8 @@ class App extends Component {
     const hoursArray = hours.map((entry,index) => {
       return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
     });
-    let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
+    //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
+    let entries = window.localStorage.getItem("entries")
     let pastArray = null
     if(entries == null) {
       pastArray = (
@@ -214,7 +216,8 @@ class App extends Component {
    * Bound function that updates the specified entry's description.
    */
   editPastDesc = function (index, newDesc) {
-    let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
+    //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
+    let entries = window.localStorage.getItem("entries")
     entries[index].description = newDesc;
     window.localStorage["entries"] = JSON.stringify(entries);
     return null;
@@ -330,10 +333,15 @@ class App extends Component {
    * Credits: https://stackoverflow.com/questions/16428835/save-data-from-localstorage-to-csv#16430518
    */
   exportData = function () {
-    let jsonDataArray = JSON.parse(localStorage.getItem("entries"));
+    let entries = localStorage.getItem("entries");
+    if(entries == null) {
+      // TODO tests
+      return;
+    }
+    let jsonDataArray = JSON.parse(entries);
     if(jsonDataArray == null) {
       // TODO tests for stuff like this?
-      return
+      return;
     }
     let trackedData = this.jsonArrToCsv(jsonDataArray);
     var blob = new Blob([trackedData], {type: "text/csv"});
