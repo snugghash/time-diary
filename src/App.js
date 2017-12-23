@@ -9,7 +9,6 @@ class App extends Component {
   constructor() {
     super();
 
-
     // Prevent error upon passing null to jsonArrToCsv
     //this.retrieve_or_storeDefault_in_localStorage("entries", []);
     //window.localStorage.getItem("entries")
@@ -32,9 +31,13 @@ class App extends Component {
     this.onHoverOver = this.onHoverOver.bind(this);
   }
 
+
+
   getInitialState() {
     console.log("TODO get intial state from localStorage");
   }
+
+
 
   componentDidMount() {
     this.timer = setInterval(
@@ -43,9 +46,81 @@ class App extends Component {
     );
   }
 
+
+
   componentWillUnmount() {
     clearInterval(this.timer);
   }
+
+
+
+  render() {
+    // https://stackoverflow.com/a/20066663/
+    const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
+    const secondsArray = seconds.map((entry,index) => {
+      let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)
+      let color = "#aaa"
+      if (elementTime < this.state.selectedTime2 && elementTime > this.state.selectedTime1) {
+        color = "#aae"
+      }
+      return <Second key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color}/>
+    });
+    const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
+    const minutesArray = minutes.map((entry,index) => {
+      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onSlice={this.uponSlicingTime} />
+    });
+    const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
+    const hoursArray = hours.map((entry,index) => {
+      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
+    });
+    //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
+    let entries = JSON.parse(window.localStorage.getItem("entries"));
+    let pastArray = null;
+    if(entries == null) {
+      pastArray = (
+        <p> No entries to display </p>
+      );
+    }
+    else {
+      pastArray = entries.map((entry, index) => {
+        if (entry.endTime < this.state.showPastUntil) {
+          return <div key={entry.startTime}/>;
+        }
+        return (
+          <p key={entry.startTime}>
+          {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
+          <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
+          </p>
+        );
+      }).reverse();
+    }
+    return (
+      // https://stackoverflow.com/a/37379388
+      <div>
+      <button onClick={() => {this.setState(
+        prevState => ({tracking: !prevState.tracking})
+      );}} > Start/stop </button>
+      {secondsArray}
+      {minutesArray}
+      {hoursArray}
+      <hr/>
+      {new Date(this.state.startTime).toLocaleString()}
+      <hr/>
+      <h3>Past</h3>
+      <button onClick={() => {this.setState(
+        prevState => ({showPastUntil: prevState.showPastUntil + 3600000})
+      );}} >Load less</button>
+      <button onClick={() => {this.setState(
+        prevState => {
+          return {showPastUntil: prevState.showPastUntil - 3600000};
+        }
+      );}} >Load more</button>
+      {pastArray}
+      </div>
+    );
+  }
+
+
 
   tick() {
     if(this.state.tracking) {
@@ -59,6 +134,8 @@ class App extends Component {
       });
     }
   }
+
+
 
   /*
    * If already selected, find the range and slice time.
@@ -109,6 +186,7 @@ class App extends Component {
   }
 
 
+
   onHoverOver(selectedTime2) {
     if(this.state.selected) {
       console.log("Hovering over ", selectedTime2);
@@ -118,6 +196,7 @@ class App extends Component {
     }
     return;
   }
+
 
 
   /* Ask user for description of time slice, sanitize description.
@@ -133,6 +212,8 @@ class App extends Component {
     }
     return description;
   }
+
+
 
   uponSlicingTime(endTime, event) {
     console.log("Mouse y position", event.clientY);
@@ -150,71 +231,7 @@ class App extends Component {
     this.exportData();
   };
 
-  render() {
-    // https://stackoverflow.com/a/20066663/
-    const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
-    const secondsArray = seconds.map((entry,index) => {
-      let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)
-      let color = "#aaa"
-      if (elementTime < this.state.selectedTime2 && elementTime > this.state.selectedTime1) {
-        color = "#aae"
-      }
-      return <Second key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color}/>
-    });
-    const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
-    const minutesArray = minutes.map((entry,index) => {
-      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onSlice={this.uponSlicingTime} />
-    });
-    const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
-    const hoursArray = hours.map((entry,index) => {
-      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
-    });
-    //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
-    let entries = JSON.parse(window.localStorage.getItem("entries"));
-    let pastArray = null;
-    if(entries == null) {
-      pastArray = (
-        <p> No entries to display </p>
-      );
-    }
-    else {
-      pastArray = entries.map((entry, index) => {
-        if (entry.endTime < this.state.showPastUntil) {
-          return <div key={entry.startTime}/>;
-        }
-        return (
-          <p key={entry.startTime}>
-          {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
-          <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
-          </p>
-        );
-      }).reverse();
-    }
-    return (
-      // https://stackoverflow.com/a/37379388
-      <div>
-      <button onClick={() => {this.setState(
-        prevState => ({tracking: !prevState.tracking})
-      );}} > Start/stop </button>
-        {secondsArray}
-        {minutesArray}
-        {hoursArray}
-        <hr/>
-        {new Date(this.state.startTime).toLocaleString()}
-        <hr/>
-        <h3>Past</h3>
-        <button onClick={() => {this.setState(
-          prevState => ({showPastUntil: prevState.showPastUntil + 3600000})
-        );}} >Load less</button>
-        <button onClick={() => {this.setState(
-          prevState => {
-            return {showPastUntil: prevState.showPastUntil - 3600000};
-          }
-        );}} >Load more</button>
-        {pastArray}
-      </div>
-    );
-  }
+
 
   /**
    * Bound function that updates the specified entry's description.
@@ -227,6 +244,8 @@ class App extends Component {
     return null;
   };
 
+
+
   /*
    * Copy values from localStorage, if empty, store in defaultValue and return it.
    */
@@ -237,6 +256,7 @@ class App extends Component {
     }
     else return JSON.parse(window.localStorage[variable]);
   };
+
 
 
   /**
@@ -297,6 +317,8 @@ class App extends Component {
     window.localStorage["tagTimes"] = JSON.stringify(tagTimes);
   };
 
+
+
   /**
    * Parse the tags out from the text description, rn just words ending with ';'
    * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
@@ -316,6 +338,8 @@ class App extends Component {
     return [...new Set([...endTags], [...startTags])]
   };
 
+
+
   /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
    * Credits: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable#8924856
    */
@@ -332,6 +356,8 @@ class App extends Component {
     }
     return str;
   }
+
+
 
   /* Modifies a link's href to point to a CSV file with journal entries generated from a JSON array (TODO perhaps doing this on demand, perhaps storing and appending to the final CSV in localStorage along with the JSON array would be better, performance-wise), to be viewed/saved by the user.
    * Credits: https://stackoverflow.com/questions/16428835/save-data-from-localstorage-to-csv#16430518
@@ -355,6 +381,7 @@ class App extends Component {
     a.download = "timeDiaryData.csv";
   }
 }
+
 
 
 class Second extends Component {
@@ -388,14 +415,20 @@ class EditableTimeSlice extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+
+
   componentWillMount() {
     this.setState({desc: this.props.desc});
   }
+
+
 
   handleChange (e) {
     this.setState({[e.target.name]: e.target.value});
     this.props.onChange(e.target.value); // Send the new description to overwrite the found entry's description.
   };
+
+
 
   render() {
     return (
@@ -412,6 +445,8 @@ class Minute extends Component {
       split: false,
     };
   }
+
+
 
   render() {
     const minuteHeight = 2;
@@ -448,6 +483,7 @@ class Minute extends Component {
 }
 
 
+
 class Hour extends Component {
   constructor() {
     super();
@@ -455,6 +491,9 @@ class Hour extends Component {
       split: false,
     };
   }
+
+
+
   render() {
     const hourHeight = 5;
     const hourEle = (
@@ -488,5 +527,7 @@ class Hour extends Component {
     }
   }
 }
+
+
 
 export default App;
