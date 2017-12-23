@@ -1,7 +1,7 @@
 if (Modernizr.localstorage) {
   // window.localStorage is available!
 } else {
-  // no native support for HTML5 storage :(
+  console.log("No native support for HTML5 storage :(");
   // maybe try dojox.storage or a third-party solution
 }
 //let s = Snap("#timeSVG");
@@ -295,6 +295,8 @@ $('#importData').on('change', function() {
       else {
         entries = JSON.parse(window.localStorage["entries"]);
       }
+      let maximum_time = 0; //JSON.parse(window.localStorage["startTime"]); // Prolly causes error if null TODO
+      console.log("init max time", maximum_time);
       for(let j=0; j < jsonArr.length - 1; j++) {
         let exists = false;
         temp = {
@@ -303,6 +305,9 @@ $('#importData').on('change', function() {
           description: jsonArr[j][2],
           tags: jsonArr[j].slice(3)
         };
+        if(temp.endTime > maximum_time) {
+          maximum_time = temp.endTime;
+        }
         for (let k=0; k < entries.length; k++) {
           if(entries[k].startTime == temp.startTime &&
              entries[k].endTime == temp.endTime) {
@@ -322,6 +327,9 @@ $('#importData').on('change', function() {
         if(exists == false)
           entries.push(temp);
       }
+      console.log("final max time", maximum_time);
+      window.localStorage["startTime"] = JSON.stringify(maximum_time);
+      window.localStorage["startTimeString"] = maximum_time.toLocaleString();
       entries = [...new Set(entries)];
       console.log(entries);
       importConfirm = prompt("Check log output, import? true/false");
