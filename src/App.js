@@ -188,7 +188,7 @@ class App extends Component {
           <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
           </p>
         );
-      });
+      }).reverse();
     }
     return (
       // https://stackoverflow.com/a/37379388
@@ -199,6 +199,9 @@ class App extends Component {
         {secondsArray}
         {minutesArray}
         {hoursArray}
+        <hr/>
+        {new Date(this.state.startTime).toLocaleString()}
+        <hr/>
         <h3>Past</h3>
         <button onClick={() => {this.setState(
           prevState => ({showPastUntil: prevState.showPastUntil + 3600000})
