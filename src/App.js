@@ -5,6 +5,7 @@ import './css/Hour.css';
 import './css/Split.css';
 
 
+
 class App extends Component {
   constructor() {
     super();
@@ -58,20 +59,30 @@ class App extends Component {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
-      let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index)
+      let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index);
       let color = "#aaa"
-      if (elementTime < this.state.selectedTime2 && elementTime > this.state.selectedTime1) {
+      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) < 0) {
         color = "#aae"
       }
-      return <Second key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color}/>
+      return <Second key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color} selectedTime1={this.state.selectedTime1} selectedTime2={this.state.selectedTime2}/>
     });
     const minutes = Array.apply(null, {length: this.state.numberOfMinutes}).map(Number.call, Number)
     const minutesArray = minutes.map((entry,index) => {
-      return <Minute key={index} time={this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index)} onSlice={this.uponSlicingTime} />
+      let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index);
+      let color = "#aaa"
+      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) < 0) {
+        color = "#aae"
+      }
+      return <Minute key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color} selectedTime1={this.state.selectedTime1} selectedTime2={this.state.selectedTime2}/>
     });
     const hours = Array.apply(null, {length: this.state.numberOfHours}).map(Number.call, Number)
     const hoursArray = hours.map((entry,index) => {
-      return <Hour key={index} time={this.state.startTime + 3600000*(this.state.numberOfHours-index)} onSlice={this.uponSlicingTime}/>
+      let elementTime = this.state.startTime + 3600000*(this.state.numberOfHours-index);
+      let color = "#aaa"
+      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) < 0) {
+        color = "#aae"
+      }
+      return <Hour key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color} selectedTime1={this.state.selectedTime1} selectedTime2={this.state.selectedTime2}/>
     });
     //let entries = this.retrieve_or_storeDefault_in_localStorage("entries", null)
     let entries = JSON.parse(window.localStorage.getItem("entries"));
@@ -384,6 +395,7 @@ class App extends Component {
 
 
 
+
 class Second extends Component {
   render() {
     let secondHeight = 0.1;
@@ -395,6 +407,8 @@ class Second extends Component {
 }
 
 
+
+
 class Split extends Component {
   render() {
     return (
@@ -404,6 +418,8 @@ class Split extends Component {
     );
   }
 }
+
+
 
 
 class EditableTimeSlice extends Component {
@@ -438,6 +454,8 @@ class EditableTimeSlice extends Component {
 }
 
 
+
+
 class Minute extends Component {
   constructor() {
     super();
@@ -452,7 +470,7 @@ class Minute extends Component {
     const minuteHeight = 2;
     const minuteEle = (
       <div style={{position: "relative"}}>
-      <div className="Minute" style={{height:minuteHeight+ "em"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
+      <div className="Minute" style={{height:minuteHeight+ "em", backgroundColor:this.props.color}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
       </div>
         <Split
@@ -465,7 +483,12 @@ class Minute extends Component {
     if(this.state.split === true) {
       const seconds = Array.apply(null, {length: 60}).map(Number.call, Number)
       const secondsArray = seconds.map((entry,index) => {
-        return <Second key={index} time={this.props.time - 1000*(index)} onSlice={this.props.onSlice}/>
+        let elementTime = this.props.time - 1000*(index)
+        let color = "#aaa"
+        if ((elementTime - this.props.selectedTime2) * (elementTime - this.props.selectedTime1) < 0) {
+          color = "#aae"
+        }
+        return <Second key={index} time={elementTime} onSlice={this.props.onSlice} onSelect={this.props.onSelect} onHoverOver={this.props.onHoverOver} color={color}/>
       });
       return (
         <div>
@@ -498,7 +521,7 @@ class Hour extends Component {
     const hourHeight = 5;
     const hourEle = (
       <div style={{position: "relative"}}>
-        <div className="Hour" style={{height:hourHeight+ "em"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)}>
+        <div className="Hour" style={{height:hourHeight+ "em"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
         </div>
         <Split
@@ -511,7 +534,12 @@ class Hour extends Component {
     if(this.state.split === true) {
       const minutes = Array.apply(null, {length: 60}).map(Number.call, Number)
       const array = minutes.map((entry,index) => {
-        return <Minute key={index} time={this.props.time - 60000*(index)} onSlice={this.props.onSlice}/>
+        let elementTime = this.props.time - 60000*(index);
+        let color = "#aaa";
+        if ((elementTime - this.props.selectedTime2) * (elementTime - this.props.selectedTime1) < 0) {
+          color = "#aae"
+        }
+        return <Minute key={index} time={elementTime} onSlice={this.props.onSlice} onSelect={this.props.onSelect} onHoverOver={this.props.onHoverOver} color={color} selectedTime1={this.props.selectedTime1} selectedTime2={this.props.selectedTime2}/>
       });
       return (
         <div>
