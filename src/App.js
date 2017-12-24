@@ -148,21 +148,25 @@ class App extends Component {
 
 
 
-  /*
-   * If already selected, find the range and slice time.
-   */
+  // Called when a click occurs on any time element.
+  // If already selected, find the range and slice time.
+  // TODO change to call double click  when done.
+  // TODO RF to check time since startTime for sliced objects
   onSelect(selectedTime1, sizeOfBlock) {
-    console.log("Selected time1 ", selectedTime1);
     this.setState(
       prevState => {
         console.log("Selected time", selectedTime1);
         if(prevState.selected === false) {
-
           return {selected: !(prevState.selected),
             selectedTime1: selectedTime1,
           };
         }
         else {
+          // Call uponSlicingTime when first and second clicks are on same
+          if(prevState.selectedTime1 === selectedTime1) {
+            console.log("Double click on ", selectedTime1);
+            this.uponSlicingTime(selectedTime1);
+          }
           return {selected: !(prevState.selected),
             selectedTime2: selectedTime1,
           };
@@ -171,13 +175,6 @@ class App extends Component {
     );
     return;
     let selectedTime2 = this.retrieve_or_storeDefault_in_localStorage("selectedTime");
-    // Hack to see if one time was already selceted
-    if(selectedTime1 === selectedTime2) {
-      // First selected time, TODO UX
-      // TODO make this the way to call double click
-      console.log("Double click on same");
-      return;
-    }
     // Get direction of time slice
     if(selectedTime1 > selectedTime2) {
       var startTime = selectedTime2;
@@ -227,9 +224,9 @@ class App extends Component {
 
 
   uponSlicingTime(endTime, event) {
-    console.log("Mouse y position", event.clientY);
+    // console.log("Mouse y position", event.clientY);
     let startTime = this.state.startTime;
-    console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
+    console.log("Slicing at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
     // Ask user for description of the time slice.
     let description = this.getDescription(startTime, endTime);
     if (description === null)
@@ -400,7 +397,7 @@ class Second extends Component {
   render() {
     let secondHeight = 0.1;
     return (
-      <div className="Second" style={{height:secondHeight + "em", backgroundColor:this.props.color}} onDoubleClick={this.props.onSlice.bind(null,this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
+      <div className="Second" style={{height:secondHeight + "em", backgroundColor:this.props.color}} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
       </div>
     );
   }
@@ -470,7 +467,7 @@ class Minute extends Component {
     const minuteHeight = 2;
     const minuteEle = (
       <div style={{position: "relative"}}>
-      <div className="Minute" style={{height:minuteHeight+ "em", backgroundColor:this.props.color}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
+      <div className="Minute" style={{height:minuteHeight+ "em", backgroundColor:this.props.color}} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
       </div>
         <Split
@@ -521,7 +518,7 @@ class Hour extends Component {
     const hourHeight = 5;
     const hourEle = (
       <div style={{position: "relative"}}>
-        <div className="Hour" style={{height:hourHeight+ "em"}} onDoubleClick={this.props.onSlice.bind(null, this.props.time)} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
+        <div className="Hour" style={{height:hourHeight+ "em"}} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
         </div>
         <Split
