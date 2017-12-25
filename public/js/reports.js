@@ -7,25 +7,21 @@ if (Modernizr.localstorage) {
 }
 
 
-// TODO timedTags only exist until the last browser cache clear. Generate them here, remove storage for them in localStorage
-let timedTags = null;
-if(window.localStorage.getItem("tagTimes") === null) {
-    ;
-}
-else {
-  timedTags = JSON.parse(window.localStorage["tagTimes"]);
-}
+
+// TODO remove storage for timedTags in localStorage
+let currentTime = new Date().getTime();
+timedTagsAllTime = getTimesForTags(0, currentTime);
 
 let chart = {
   "$schema": "https://vega.github.io/schema/vega/v3.0.json",
-  "width": timedTags.length*10,
+  "width": timedTagsAllTime.length*10,
   "height": 200,
   "padding": 5,
   "autosize": "pad",
   "data": [
     {
       "name": "Tag times",
-      "values": timedTags,
+      "values": timedTagsAllTime,
     }
   ],
   "scales": [
@@ -99,7 +95,7 @@ let chart = {
   ],
 }
 
-vega.embed('#chart', chart);
+vega.embed('#chartAllTime', chart);
 
 
 // TODO Numbers for tags don't work. tagTimes.indexOf(2) gives -1 even if 2 was in tagTimes.
@@ -129,7 +125,6 @@ function getTimesForTags(startTime, endTime) {
 
 
 
-let currentTime = new Date().getTime();
 timedTagsLast24Hours = getTimesForTags(currentTime - 1000*60*60*24, currentTime);
 
 let chartLast24Hours = {
