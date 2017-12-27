@@ -152,6 +152,8 @@ class App extends Component {
   // If already selected, find the range and slice time.
   // TODO change to call double click  when done.
   // TODO RF to check time since startTime for sliced objects
+  // TODO Weird bug where double clicking sliced time about 10 minutes
+  // into the future. startTime was 10 minutes into the future, and all the seconds, minutes were negative.
   onSelect(selectedTime1, sizeOfBlock) {
     this.setState(
       prevState => {
