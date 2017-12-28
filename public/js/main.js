@@ -120,6 +120,26 @@ function CSVToArray( strData, strDelimiter ){
   return( arrData );
 }
 
+
+$('#searchButton').on('click', function() {
+  if(window.localStorage.getItem("entries") === null) {
+    return
+  }
+  else {
+    entries = JSON.parse(window.localStorage["entries"]);
+  }
+  searchTerms = $("#searchString").val().split();
+  for(let i = 0; i < entries.length; i++){
+    for(let j=0; j<searchTerms.length; j++) {
+      if(entries[i].description.indexOf(searchTerms[j]) != -1) {
+        console.log("found");
+        $("#searchResult").append(`<div> ${entries[i].description} <br/> ${entries[i+1].description}</div>`);
+      }
+    }
+  }
+});
+
+
 $('#importData').on('change', function() {
   for(let i=0; i < this.files.length; i++) {
     file = this.files[i];
