@@ -154,6 +154,11 @@ class App extends Component {
   // TODO RF to check time since startTime for sliced objects
   // TODO Weird bug where double clicking sliced time about 10 minutes
   // into the future. startTime was 10 minutes into the future, and all the seconds, minutes were negative.
+  // Bug update: performance analysis revealed no function hold up the UI time-slices update.
+  // The thing updates the entries which display stuff below the time slices, then tick occurs,
+  // nothing changes - here's where the time compos are representing future.
+  // The NEXT tick fixes this, removing the sliced components. Entire 1s was
+  // bad state, where the user can see and interact with future time.
   onSelect(selectedTime1, sizeOfBlock) {
     this.setState(
       prevState => {
