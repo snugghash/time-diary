@@ -230,8 +230,7 @@ class App extends Component {
 
 
 
-  uponSlicingTime(endTime, event) {
-    // console.log("Mouse y position", event.clientY);
+  uponSlicingTime(endTime) {
     let startTime = this.state.startTime;
     console.log("Slicing at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
     // Ask user for description of the time slice.
