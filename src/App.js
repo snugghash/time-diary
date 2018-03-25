@@ -180,12 +180,16 @@ class App extends Component {
         }
       }
     );
-    return;
-    let selectedTime2 = this.retrieve_or_storeDefault_in_localStorage("selectedTime");
+    let endTime;
+    let startTime;
     // Get direction of time slice
-    if(selectedTime1 > selectedTime2) {
-      var startTime = selectedTime2;
-      var endTime = selectedTime1;
+    if(this.state.selectedTime1 > this.state.selectedTime2) {
+      startTime = this.state.selectedTime2;
+      endTime = this.state.selectedTime1;
+    }
+    else {
+      startTime = this.state.selectedTime1;
+      endTime = this.state.selectedTime2;
     }
     // We now have two times, get the full time slice
     console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
@@ -195,9 +199,15 @@ class App extends Component {
       return;
     this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
     this.exportData();
-    // Remove from localStorage
-    window.localStorage.removeItem("selectedTime");
-    // TODO do something about the gap in recorded time left by this. Or compensate for it when making the "startTime" to ending slices. Or leave it that way for overarching stuff. TOTHINK
+    this.setState({
+      selected: false
+    });
+    // TODO do something about the gap in recorded time left by this.
+    // Or compensate for it when making the "startTime" to ending slices.
+    // Or leave it that way for overarching stuff. TOTHINK
+    // Current implementation: show that slice has description,
+    // but still show slice.
+
   }
 
 
