@@ -108,6 +108,10 @@ class App extends Component {
     return (
       // https://stackoverflow.com/a/37379388
       <div>
+      {
+        // BUG flattenChildren(...): Encountered two children with the same key, `a:$1522293681809`. Child keys must be unique; when two children share a key, only the first child will be used. in div (at App.js:110)
+        // BUG Start/stop doesn't work
+      }
       <button onClick={() => {this.setState(
         prevState => ({tracking: !prevState.tracking})
       );}} > Start/stop </button>
@@ -152,13 +156,15 @@ class App extends Component {
   // If already selected, find the range and slice time.
   // TODO change to call double click  when done.
   // TODO RF to check time since startTime for sliced objects
-  // TODO Weird bug where double clicking sliced time about 10 minutes
+  // TODO Weird BUG where double clicking sliced time about 10 minutes
   // into the future. startTime was 10 minutes into the future, and all the seconds, minutes were negative.
   // Bug update: performance analysis revealed no function hold up the UI time-slices update.
   // The thing updates the entries which display stuff below the time slices, then tick occurs,
   // nothing changes - here's where the time compos are representing future.
   // The NEXT tick fixes this, removing the sliced components. Entire 1s was
   // bad state, where the user can see and interact with future time.
+  // BUG After doing intermediate slices the starttime becomes null.
+  // BUG Slice from time slice only occurs once in three attempts.
   onSelect(selectedTime1, sizeOfBlock) {
     this.setState(
       prevState => {
