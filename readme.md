@@ -2,10 +2,10 @@
 
 ## Features
 * Interactive timer.
-* User can observe visually how much time has elapsed. 
+* User can observe visually how much time has elapsed.
 * Can split spent time and assign tags to blocks.
 * Completely client based.
-* Export data (to CSV), to be synced to other devices, imported into data analysis software, etc. 
+* Export data (to CSV), to be synced to other devices, imported into data analysis software, etc.
 
 ## Workflow
 1. Start tracking.
@@ -15,6 +15,11 @@
 
 ## Notes
 * Switching from GitHub pages (or switching subdomain in general) will refresh all your data, since this uses localStorage. Export, transport, import.
+
+### TODO
+[] UX for in-between slices must make it clear that that time has a description
+[] UI for getting description
+
 
 ## Support, feature requests, donations
 Troubleshooting support costs you based on the speed of response.
