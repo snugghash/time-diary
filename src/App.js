@@ -154,7 +154,6 @@ class App extends Component {
 
   // Called when a click occurs on any time element.
   // If already selected, find the range and slice time.
-  // TODO change to call double click  when done.
   // TODO RF to check time since startTime for sliced objects
   // TODO Weird BUG where double clicking sliced time about 10 minutes
   // into the future. startTime was 10 minutes into the future, and all the seconds, minutes were negative.
@@ -164,7 +163,6 @@ class App extends Component {
   // The NEXT tick fixes this, removing the sliced components. Entire 1s was
   // bad state, where the user can see and interact with future time.
   // BUG After doing intermediate slices the starttime becomes null.
-  // BUG Slice from time slice only occurs once in three attempts.
   onSelect(selectedTime1, sizeOfBlock) {
     this.setState(
       prevState => {
@@ -178,26 +176,34 @@ class App extends Component {
           // Call uponSlicingTime when first and second clicks are on same
           if(prevState.selectedTime1 === selectedTime1) {
             console.log("Double click on ", selectedTime1);
-            this.uponSlicingTime(selectedTime1);
+            this.uponSlicingTime(selectedTime1); // TODO async
+            return {selected: !(prevState.selected)}
           }
-          return {selected: !(prevState.selected),
-            selectedTime2: selectedTime1,
-          };
+          // Get direction of time slice
+          let startTime;
+          let endTime;
+          if(prevState.selectedTime1 > selectedTime1) {
+            startTime = selectedTime1;
+            endTime = prevState.selectedTime1;
+          }
+          else {
+            startTime = prevState.selectedTime1;
+            endTime = selectedTime1;
+          }
+          this.onArbitraryTimeSlice(startTime, endTime);
+          return {
+            selected: !(prevState.selected),
+            selectedTime1: null,
+            selectedTime2: null
+          }
         }
       }
     );
-    let endTime;
-    let startTime;
-    // Get direction of time slice
-    if(this.state.selectedTime1 > this.state.selectedTime2) {
-      startTime = this.state.selectedTime2;
-      endTime = this.state.selectedTime1;
-    }
-    else {
-      startTime = this.state.selectedTime1;
-      endTime = this.state.selectedTime2;
-    }
-    // We now have two times, get the full time slice
+  }
+
+  // Act upon arbitrary time slices
+  onArbitraryTimeSlice(startTime, endTime) {
+    // We now have two times, get the full time slice and log in human readable
     console.log("Sliced at " + new Date(endTime).toLocaleString() + " from " + new Date(startTime).toLocaleString());
     // Ask user for description of the time slice.
     let description = this.getDescription(startTime, endTime);
@@ -205,15 +211,11 @@ class App extends Component {
       return;
     this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
     this.exportData();
-    this.setState({
-      selected: false
-    });
     // TODO do something about the gap in recorded time left by this.
     // Or compensate for it when making the "startTime" to ending slices.
     // Or leave it that way for overarching stuff. TOTHINK
     // Current implementation: show that slice has description,
     // but still show slice.
-
   }
 
 
