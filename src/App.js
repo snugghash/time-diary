@@ -95,21 +95,22 @@ class App extends Component {
     else {
       pastArray = entries.map((entry, index) => {
         if (entry.endTime < this.state.showPastUntil) {
-          return <div key={entry.startTime}/>;
+          return <div key={index}/>;
         }
-        return (
-          <p key={entry.startTime}>
-          {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
-          <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
-          </p>
-        );
+        else {
+          return (
+            <p key={index}>
+            {new Date(entry.startTime).toLocaleString()} to {new Date(entry.endTime).toLocaleString()}
+            <EditableTimeSlice desc={entry.description} onChange={this.editPastDesc.bind(this, index)}/>
+            </p>
+          );
+        }
       }).reverse();
     }
     return (
       // https://stackoverflow.com/a/37379388
       <div>
       {
-        // BUG flattenChildren(...): Encountered two children with the same key, `a:$1522293681809`. Child keys must be unique; when two children share a key, only the first child will be used. in div (at App.js:110)
         // BUG Start/stop doesn't work
       }
       <button onClick={() => {this.setState(
