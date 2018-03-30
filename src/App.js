@@ -42,8 +42,8 @@ class App extends Component {
 
   componentDidMount() {
     this.timer = setInterval(
-      () => this.tick(),
-      150 // Taking performance hit to avoid showing user future time for an entire second
+      this.tick.bind(this),
+      5000 // Taking performance hit to avoid showing user future time for an entire second
     );
   }
 
@@ -273,6 +273,10 @@ class App extends Component {
     // Set startTime, trackedTime, and the rest of state. Failed.
     // Set this.state property and call forced update. Still failed to update state immediately. Failed.
     // Hence we know it is not because of state not being set, although that is the case if the react debug tools are to be believed. The piece of code WAS being called. Not changing even after a forceUpdate()
+    clearInterval(this.timer);
+    this.tick();
+    this.forceUpdate();
+    this.componentDidMount();
   };
 
 
