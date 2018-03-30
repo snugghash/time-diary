@@ -43,9 +43,16 @@ class App extends Component {
   componentDidMount() {
     this.timer = setInterval(
       () => this.tick(),
-      1000
+      150 // Taking performance hit to avoid showing user future time for an entire second
     );
   }
+
+
+
+  // Possible fix to the update of startTime showing up after one tick, and the update of trackedTime after two ticks. Failed.
+  // componentWillMount() {
+  //   this.forceUpdate();
+  // }
 
 
 
@@ -258,10 +265,14 @@ class App extends Component {
       return;
     this.storeEntry(startTime, endTime, '"' + description + '"', this.getTags(description));
     startTime = new Date(endTime);
-    this.setState({startTime: startTime.getTime()});
     window.localStorage["startTime"] = startTime.getTime();
     window.localStorage["startTimeString"] = startTime.toLocaleString();
     this.exportData();
+
+    // Call tick to change all time blocks according to startTime. Failed.
+    // Set startTime, trackedTime, and the rest of state. Failed.
+    // Set this.state property and call forced update. Still failed to update state immediately. Failed.
+    // Hence we know it is not because of state not being set, although that is the case if the react debug tools are to be believed. The piece of code WAS being called. Not changing even after a forceUpdate()
   };
 
 
