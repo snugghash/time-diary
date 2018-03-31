@@ -42,8 +42,12 @@ class App extends Component {
 
   componentDidMount() {
     this.timer = setInterval(
-      this.tick.bind(this),
-      5000 // Taking performance hit to avoid showing user future time for an entire second
+      () => {
+        if(this.state.tracking) {
+          this.setState(this.updateState)
+        }
+      },
+      1000
     );
   }
 
@@ -145,18 +149,19 @@ class App extends Component {
 
 
 
-  tick() {
-    if(this.state.tracking) {
-      let currentTime = new Date().getTime();
-      this.setState({
-        startTime: this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime()),
-        numberOfSeconds: Math.floor((currentTime - this.state.startTime)/1000)%60,
-        numberOfMinutes: Math.floor((currentTime - this.state.startTime)/60000)%60,
-        numberOfHours: Math.floor((currentTime - this.state.startTime)/3600000),
-        trackedTime: currentTime - this.state.startTime,
-      });
+  // Including args state and props to make it clear this is a setState function
+  // which returns state
+  updateState(state, props) {
+    let currentTime = new Date().getTime();
+    let startTime = this.retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime());
+    return {
+      startTime: startTime,
+      numberOfSeconds: Math.floor((currentTime - startTime)/1000)%60,
+      numberOfMinutes: Math.floor((currentTime - startTime)/60000)%60,
+      numberOfHours: Math.floor((currentTime - startTime)/3600000),
+      trackedTime: currentTime - startTime,
     }
-  }
+  };
 
 
 
@@ -273,10 +278,7 @@ class App extends Component {
     // Set startTime, trackedTime, and the rest of state. Failed.
     // Set this.state property and call forced update. Still failed to update state immediately. Failed.
     // Hence we know it is not because of state not being set, although that is the case if the react debug tools are to be believed. The piece of code WAS being called. Not changing even after a forceUpdate()
-    clearInterval(this.timer);
-    this.tick();
-    this.forceUpdate();
-    this.componentDidMount();
+    // No joy with removing timer and resetting it.
   };
 
 
