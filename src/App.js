@@ -53,19 +53,13 @@ class App extends Component {
 
 
 
-  // Possible fix to the update of startTime showing up after one tick, and the update of trackedTime after two ticks. Failed.
-  // componentWillMount() {
-  //   this.forceUpdate();
-  // }
-
-
-
   componentWillUnmount() {
     clearInterval(this.timer);
   }
 
 
 
+  // BUG color of selection of time range when going backwards - doesn't show the ending or starting, only the middle block.
   render() {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
@@ -168,13 +162,6 @@ class App extends Component {
   // Called when a click occurs on any time element.
   // If already selected, find the range and slice time.
   // TODO RF to check time since startTime for sliced objects
-  // TODO Weird BUG where double clicking sliced time about 10 minutes
-  // into the future. startTime was 10 minutes into the future, and all the seconds, minutes were negative.
-  // Bug update: performance analysis revealed no function hold up the UI time-slices update.
-  // The thing updates the entries which display stuff below the time slices, then tick occurs,
-  // nothing changes - here's where the time compos are representing future.
-  // The NEXT tick fixes this, removing the sliced components. Entire 1s was
-  // bad state, where the user can see and interact with future time.
   // BUG After doing intermediate slices the starttime becomes null.
   onSelect(selectedTime1, sizeOfBlock) {
     this.setState(
@@ -273,12 +260,6 @@ class App extends Component {
     window.localStorage["startTime"] = startTime.getTime();
     window.localStorage["startTimeString"] = startTime.toLocaleString();
     this.exportData();
-
-    // Call tick to change all time blocks according to startTime. Failed.
-    // Set startTime, trackedTime, and the rest of state. Failed.
-    // Set this.state property and call forced update. Still failed to update state immediately. Failed.
-    // Hence we know it is not because of state not being set, although that is the case if the react debug tools are to be believed. The piece of code WAS being called. Not changing even after a forceUpdate()
-    // No joy with removing timer and resetting it.
   };
 
 
