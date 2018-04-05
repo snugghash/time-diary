@@ -22,6 +22,7 @@ class Blocks extends Component {
 
   /*
   TODO Think about className and possible ways to be dynamic with it.
+  TODO work backwards from best UX for viewing, interacting with tagged, known time blocks.
   */
   render() {
     return (

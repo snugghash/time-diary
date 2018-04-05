@@ -1,3 +1,9 @@
+// TODO sort tags in reports in ascending order
+// TODO UX for choosing arbitrary time, maybe like chrone dev tools > perfprmance > time selector.
+// Or some weird log-scaled version for allowing days and months on the same element.
+// Maybe only months are necessary to be selected this way - last 7 days and last day adequate for short time scales.
+
+
 
 if (Modernizr.localstorage) {
   // window.localStorage is available!
