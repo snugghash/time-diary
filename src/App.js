@@ -115,12 +115,6 @@ class App extends Component {
     return (
       // https://stackoverflow.com/a/37379388
       <div>
-      {
-        // BUG Start/stop doesn't work
-      }
-      <button onClick={() => {this.setState(
-        prevState => ({tracking: !prevState.tracking})
-      );}} > Start/stop </button>
       {secondsArray}
       {minutesArray}
       {hoursArray}
