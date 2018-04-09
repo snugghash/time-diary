@@ -131,6 +131,9 @@ class App extends Component {
         }
       );}} >Load more</button>
       {pastArray}
+      <button onClick={() => {
+        window.localStorage.clear();
+      }} > CLEAR ALL DATA!!!11!! (Starts over from 0 time tracked, no confirmation) </button>
       </div>
     );
   }
