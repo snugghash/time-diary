@@ -538,7 +538,7 @@ class Hour extends Component {
     const hourHeight = 5;
     const hourEle = (
       <div style={{position: "relative"}}>
-        <div className="Hour" style={{height:hourHeight+ "em"}} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
+        <div className="Hour" style={{height:hourHeight+ "em", backgroundColor: this.props.color}} onClick={this.props.onSelect.bind(null, this.props.time)} onMouseOver={this.props.onHoverOver.bind(null, this.props.time)}>
         {new Date(this.props.time).toLocaleString()}
         </div>
         <Split
