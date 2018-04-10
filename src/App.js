@@ -59,14 +59,14 @@ class App extends Component {
 
 
 
-  // BUG color of selection of time range when going backwards - doesn't show the ending or starting, only the middle block.
+  // BUG selection of time ranges might not be intuitive
   render() {
     // https://stackoverflow.com/a/20066663/
     const seconds = Array.apply(null, {length: this.state.numberOfSeconds}).map(Number.call, Number)
     const secondsArray = seconds.map((entry,index) => {
       let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*this.state.numberOfMinutes + 1000*(this.state.numberOfSeconds - index);
       let color = "#aaa"
-      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) < 0) {
+      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) <= 0) {
         color = "#aae"
       }
       return <Second key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color} selectedTime1={this.state.selectedTime1} selectedTime2={this.state.selectedTime2}/>
@@ -75,7 +75,7 @@ class App extends Component {
     const minutesArray = minutes.map((entry,index) => {
       let elementTime = this.state.startTime + 3600000*this.state.numberOfHours + 60000*(this.state.numberOfMinutes - index);
       let color = "#aaa"
-      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) < 0) {
+      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) <= 0) {
         color = "#aae"
       }
       return <Minute key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color} selectedTime1={this.state.selectedTime1} selectedTime2={this.state.selectedTime2}/>
@@ -84,7 +84,7 @@ class App extends Component {
     const hoursArray = hours.map((entry,index) => {
       let elementTime = this.state.startTime + 3600000*(this.state.numberOfHours-index);
       let color = "#aaa"
-      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) < 0) {
+      if ((elementTime - this.state.selectedTime2) * (elementTime - this.state.selectedTime1) <= 0) {
         color = "#aae"
       }
       return <Hour key={index} time={elementTime} onSlice={this.uponSlicingTime} onSelect={this.onSelect} onHoverOver={this.onHoverOver} color={color} selectedTime1={this.state.selectedTime1} selectedTime2={this.state.selectedTime2}/>
@@ -502,7 +502,7 @@ class Minute extends Component {
       const secondsArray = seconds.map((entry,index) => {
         let elementTime = this.props.time - 1000*(index)
         let color = "#aaa"
-        if ((elementTime - this.props.selectedTime2) * (elementTime - this.props.selectedTime1) < 0) {
+        if ((elementTime - this.props.selectedTime2) * (elementTime - this.props.selectedTime1) <= 0) {
           color = "#aae"
         }
         return <Second key={index} time={elementTime} onSlice={this.props.onSlice} onSelect={this.props.onSelect} onHoverOver={this.props.onHoverOver} color={color}/>
@@ -553,7 +553,7 @@ class Hour extends Component {
       const array = minutes.map((entry,index) => {
         let elementTime = this.props.time - 60000*(index);
         let color = "#aaa";
-        if ((elementTime - this.props.selectedTime2) * (elementTime - this.props.selectedTime1) < 0) {
+        if ((elementTime - this.props.selectedTime2) * (elementTime - this.props.selectedTime1) <= 0) {
           color = "#aae"
         }
         return <Minute key={index} time={elementTime} onSlice={this.props.onSlice} onSelect={this.props.onSelect} onHoverOver={this.props.onHoverOver} color={color} selectedTime1={this.props.selectedTime1} selectedTime2={this.props.selectedTime2}/>
