@@ -5,7 +5,10 @@ import './css/Hour.css';
 import './css/Split.css';
 
 
-
+// TODO Add ability to view arbitrary streches, TODO perhaps as a result of search
+// BUG UX pressing export with no data should raise a user-information event
+// TODO export as text with dates readable by humans as well.
+// BUG Selecting short time slices on seconds sometimes messes up the highlight: it still shows selection from startTime
 class App extends Component {
   constructor() {
     super();
