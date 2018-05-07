@@ -155,7 +155,6 @@ $('#importData').on('change', function() {
         entries = JSON.parse(window.localStorage["entries"]);
       }
       let maximum_time = 0; //JSON.parse(window.localStorage["startTime"]); // Prolly causes error if null TODO
-      console.log("init max time", maximum_time);
       for(let j=0; j < jsonArr.length - 1; j++) {
         let exists = false;
         temp = {
@@ -179,7 +178,7 @@ $('#importData').on('change', function() {
             }
             else {
               entries[k].description = entries[k].description.slice(0,-1) +" "+ temp.description + '"';
-              console.log("Same time slice, different description; entry ", k, ", finally:", entries[k].description);
+              console.log("Same time slice but different description; entry index", k, ", merged description is:", entries[k].description);
             }
           }
         }
@@ -195,6 +194,9 @@ $('#importData').on('change', function() {
       if (importConfirm == "true") {
         console.log("Imported!");
         window.localStorage["entries"] = JSON.stringify(entries);
+      }
+      else {
+        console.log("Cancelled import");
       }
     };
     r.readAsText(file);
