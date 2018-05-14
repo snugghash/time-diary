@@ -185,6 +185,17 @@ $('#importData').on('change', function() {
         if(exists == false)
           entries.push(temp);
       }
+      current_max_time = retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime())
+      maxTimeConfirm = prompt(current_max_time, " is new startTime => press 1, for ", maximum_time, "press  0, anything else to quit.");
+      if (maxTimeConfirm == "1") {
+        maximum_time = current_max_time
+      }
+      else if (maxTimeConfirm == "0") {
+        maximum_time = maximum_time
+      }
+      else {
+        return
+      }
       console.log("final max time", maximum_time);
       window.localStorage["startTime"] = JSON.stringify(maximum_time);
       window.localStorage["startTimeString"] = maximum_time.toLocaleString();
