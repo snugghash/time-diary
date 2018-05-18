@@ -185,8 +185,8 @@ $('#importData').on('change', function() {
         if(exists == false)
           entries.push(temp);
       }
-      current_max_time = retrieve_or_storeDefault_in_localStorage("startTime", new Date().getTime())
-      maxTimeConfirm = prompt(current_max_time, " is new startTime => press 1, for ", maximum_time, "press  0, anything else to quit.");
+      current_max_time = window.localStorage["startTime"] // BUG will fail if there's no start time, and it's likely to be used in that case too. TODO reuse the retrieve_or_storeDefault_in_localStorage after refactor
+      maxTimeConfirm = prompt((new Date(current_max_time)).toLocaleString() + " is new startTime => press 1, for " + (new Date(maximum_time)).toLocaleString() + " press  0, anything else to quit.");
       if (maxTimeConfirm == "1") {
         maximum_time = current_max_time
       }
