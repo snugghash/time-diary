@@ -9,6 +9,7 @@ let isTracking = (function() {
 
 
 /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
+ * TODO breaks+removes all the quotes. Need to check old data(5) for that edit.
  * Credits: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable#8924856
  */
 let jsonArrToCsv = function (array) {
