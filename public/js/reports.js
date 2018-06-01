@@ -15,7 +15,8 @@ if (Modernizr.localstorage) {
 
 // TODO remove storage for timedTags in localStorage
 let currentTime = new Date().getTime();
-timedTagsAllTime = getTimesForTags(0, currentTime);
+timedTagsAllTime = getTimesForTags(0, currentTime).slice(10)
+console.log(timedTagsAllTime);
 
 let chart = {
   "$schema": "https://vega.github.io/schema/vega/v3.0.json",
@@ -125,6 +126,7 @@ function getTimesForTags(startTime, endTime) {
       });
     }
   });
+  console.log(tagTimes);
   return tagTimes.sort((a,b) => {
     return b.time - a.time
   });
