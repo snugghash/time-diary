@@ -1,7 +1,6 @@
 // TODO UX for choosing arbitrary time, maybe like chrone dev tools > perfprmance > time selector.
 // Or some weird log-scaled version for allowing days and months on the same element.
 // Maybe only months are necessary to be selected this way - last 7 days and last day adequate for short time scales.
-// TODO BUG Changing the entries in localstorage is not changing the reports.
 
 
 
@@ -16,7 +15,7 @@ if (Modernizr.localstorage) {
 
 // TODO remove storage for timedTags in localStorage
 let currentTime = new Date().getTime();
-timedTagsAllTime = getTimesForTags(0, currentTime).slice(10)
+timedTagsAllTime = getTimesForTags(0, currentTime)
 console.log(timedTagsAllTime);
 
 let chart = {
@@ -113,6 +112,7 @@ function getTimesForTags(startTime, endTime) {
   let entries = JSON.parse(window.localStorage["entries"]);
   entries.forEach( (entry) => {
     if(entry.endTime >  startTime && entry.startTime < endTime) {
+      entry.tags = getTags(entry.description)
       entry.tags.forEach( (tag) => {
         if(tagsArrayTmp.includes(tag)) {
           tagTimes[tagsArrayTmp.indexOf(tag)].time += entry.endTime - entry.startTime;
@@ -134,6 +134,28 @@ function getTimesForTags(startTime, endTime) {
 }
 
 
+/**
+ * Parse the tags out from the text description, rn just words ending with ';'
+ * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
+ * TODO combine the both this and fn from App.js into utilities
+ */
+function getTags(description) {
+  let endTags = description.split(" ").filter(function (word) {
+    return word.slice(-1) === ";";
+  }).map(function (word) {
+    if(word[0] == '"') {
+      return word.slice(1,-1);
+    }
+    return word.slice(0, -1);
+  });
+  let startTags = description.split(" ").filter(function (word) {
+    return word.charAt(0) === "#";
+  }).map(function (word) {
+    return word.slice(1);
+  });
+  // console.log(new Set([...endTags], [...startTags])); // TODO convert to test
+  return [...new Set([...endTags], [...startTags])]
+};
 
 timedTagsLast24Hours = getTimesForTags(currentTime - 1000*60*60*24, currentTime);
 
