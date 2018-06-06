@@ -9,6 +9,7 @@ let isTracking = (function() {
 
 
 /* Gets us a well-formatted CSV file from a JSON array, with each object separated by newline, and each key omitted (values are used in fields of a row).
+ * TODO breaks+removes all the quotes. Need to check old data(5) for that edit.
  * Credits: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable#8924856
  */
 let jsonArrToCsv = function (array) {
@@ -155,7 +156,6 @@ $('#importData').on('change', function() {
         entries = JSON.parse(window.localStorage["entries"]);
       }
       let maximum_time = 0; //JSON.parse(window.localStorage["startTime"]); // Prolly causes error if null TODO
-      console.log("init max time", maximum_time);
       for(let j=0; j < jsonArr.length - 1; j++) {
         let exists = false;
         temp = {
@@ -179,12 +179,23 @@ $('#importData').on('change', function() {
             }
             else {
               entries[k].description = entries[k].description.slice(0,-1) +" "+ temp.description + '"';
-              console.log("Same time slice, different description; entry ", k, ", finally:", entries[k].description);
+              console.log("Same time slice but different description; entry index", k, ", merged description is:", entries[k].description);
             }
           }
         }
         if(exists == false)
           entries.push(temp);
+      }
+      current_max_time = window.localStorage["startTime"] // BUG will fail if there's no start time, and it's likely to be used in that case too. TODO reuse the retrieve_or_storeDefault_in_localStorage after refactor
+      maxTimeConfirm = prompt((new Date(current_max_time)).toLocaleString() + " is new startTime => press 1, for " + (new Date(maximum_time)).toLocaleString() + " press  0, anything else to quit.");
+      if (maxTimeConfirm == "1") {
+        maximum_time = current_max_time
+      }
+      else if (maxTimeConfirm == "0") {
+        maximum_time = maximum_time
+      }
+      else {
+        return
       }
       console.log("final max time", maximum_time);
       window.localStorage["startTime"] = JSON.stringify(maximum_time);
@@ -195,6 +206,9 @@ $('#importData').on('change', function() {
       if (importConfirm == "true") {
         console.log("Imported!");
         window.localStorage["entries"] = JSON.stringify(entries);
+      }
+      else {
+        console.log("Cancelled import");
       }
     };
     r.readAsText(file);
