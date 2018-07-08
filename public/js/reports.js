@@ -105,6 +105,49 @@ vega.embed('#chartAllTime', chart);
 
 
 
+
+timedTagsLast24Hours = getTimesForTags(currentTime - 1000*60*60*24, currentTime);
+let chartLast24Hours = chart;
+chartLast24Hours.width = timedTagsLast24Hours.length*10;
+chartLast24Hours.data[0].values = timedTagsLast24Hours;
+vega.embed('#chartLast24Hours', chartLast24Hours);
+
+timedTagsLast7Days = getTimesForTags(currentTime - 1000*60*60*24*7, currentTime);
+let chartLast7Days = chart;
+chartLast24Hours.width = timedTagsLast7Days.length*10;
+chartLast24Hours.data[0].values = timedTagsLast7Days;
+vega.embed('#chartLast7Days', chartLast7Days);
+
+
+
+// https://stackoverflow.com/a/14950153/
+(function(window, document, undefined){
+  window.onload = init;
+  function init(){
+    let tmp = document.getElementById("updateChartButton");
+    tmp.addEventListener('click', getTimesAndUpdateChart);
+  }
+})(window, document, undefined);
+
+function getArbitStartAndEndTimes() {
+  let arbitTimes = {};
+  arbitTimes.start = new Date(document.getElementById("arbitStartTime").value);
+  arbitTimes.end = new Date(document.getElementById("arbitEndTime").value);
+  console.log("start", arbitTimes.start.toLocaleString(), arbitTimes.end.toLocaleString());
+  return arbitTimes;
+}
+
+function getTimesAndUpdateChart() {
+  const arbitTimes = getArbitStartAndEndTimes();
+  timedTagsArbit = getTimesForTags(arbitTimes.start, arbitTimes.end);
+  let chartArbitTime = chart;
+  chartArbitTime.width = timedTagsArbit.length*10;
+  chartArbitTime.data[0].values = timedTagsArbit;
+  vega.embed('#chartArbitTime', chartArbitTime);
+}
+
+
+
 // TODO Numbers for tags don't work. tagTimes.indexOf("2") gives -1 even if 2 was in tagTimes.
 // Current workaround is to chnage entries to not have those.
 function getTimesForTags(startTime, endTime) {
@@ -136,6 +179,7 @@ function getTimesForTags(startTime, endTime) {
 }
 
 
+
 /**
  * Parse the tags out from the text description, rn just words ending with ';'
  * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
@@ -158,281 +202,3 @@ function getTags(description) {
   // console.log(new Set([...endTags], [...startTags])); // TODO convert to test
   return [...new Set([...endTags], [...startTags])]
 };
-
-timedTagsLast24Hours = getTimesForTags(currentTime - 1000*60*60*24, currentTime);
-
-let chartLast24Hours = {
-  "$schema": "https://vega.github.io/schema/vega/v3.0.json",
-  "width": timedTagsLast24Hours.length*10,
-  "height": 200,
-  "padding": 5,
-  "autosize": "pad",
-  "data": [
-    {
-      "name": "Tag times",
-      "values": timedTagsLast24Hours,
-    }
-  ],
-  "scales": [
-    {
-      "name": "xscale",
-      "type": "band",
-      "domain": {"data": "Tag times", "field": "tag"},
-      "range": {"step": 60},
-      "padding": 0.05,
-      "round": true
-    },
-    {
-      "name": "yscale",
-      "domain": {"data": "Tag times", "field": "time"},
-      "nice": true,
-      "range": "height"
-    }
-  ],
-  "axes": [
-    { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-    { "orient": "left", "scale": "yscale", "title": "Time (s)" }
-  ],
-  "marks": [
-    {
-      "type": "rect",
-      "from": {"data":"Tag times"},
-      "encode": {
-        "enter": {
-          "x": {"scale": "xscale", "field": "tag"},
-          "width": {"scale": "xscale", "band": 1},
-          "y": {"scale": "yscale", "field": "time"},
-          "y2": {"scale": "yscale", "value": 0}
-        },
-        "update": {
-          "fill": {"value": "steelblue"}
-        },
-        "hover": {
-          "fill": {"value": "red"}
-        }
-      }
-    },
-    {
-      "type": "text",
-      "encode": {
-        "enter": {
-          "align": {"value": "center"},
-          "baseline": {"value": "bottom"},
-          "fill": {"value": "#333"}
-        },
-        "update": {
-          "x": {"scale": "xscale", "signal": "tooltip.tag", "band": 0.5},
-          "y": {"scale": "yscale", "signal": "tooltip.time", "offset": -2},
-          "text": {"signal": "tooltip.time"},
-          "fillOpacity": [
-            {"test": "datum === tooltip", "value": 0},
-            {"value": 1}
-          ]
-        }
-      }
-    },
-  ],
-  "signals": [
-    {
-      "name": "tooltip",
-      "value": {},
-      "on": [
-        {"events": "rect:mouseover", "update": "datum"},
-        {"events": "rect:mouseout",  "update": "{}"}
-      ]
-    }
-  ],
-}
-
-vega.embed('#chartLast24Hours', chartLast24Hours);
-
-timedTagsLast7Days = getTimesForTags(currentTime - 1000*60*60*24*7, currentTime);
-let chartLast7Days = {
-  "$schema": "https://vega.github.io/schema/vega/v3.0.json",
-  "width": timedTagsLast7Days.length*10,
-  "height": 200,
-  "padding": 5,
-  "autosize": "pad",
-  "data": [
-    {
-      "name": "Tag times",
-      "values": timedTagsLast7Days,
-    }
-  ],
-  "scales": [
-    {
-      "name": "xscale",
-      "type": "band",
-      "domain": {"data": "Tag times", "field": "tag"},
-      "range": {"step": 60},
-      "padding": 0.05,
-      "round": true
-    },
-    {
-      "name": "yscale",
-      "domain": {"data": "Tag times", "field": "time"},
-      "nice": true,
-      "range": "height"
-    }
-  ],
-  "axes": [
-    { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-    { "orient": "left", "scale": "yscale", "title": "Time (s)" }
-  ],
-  "marks": [
-    {
-      "type": "rect",
-      "from": {"data":"Tag times"},
-      "encode": {
-        "enter": {
-          "x": {"scale": "xscale", "field": "tag"},
-          "width": {"scale": "xscale", "band": 1},
-          "y": {"scale": "yscale", "field": "time"},
-          "y2": {"scale": "yscale", "value": 0}
-        },
-        "update": {
-          "fill": {"value": "steelblue"}
-        },
-        "hover": {
-          "fill": {"value": "red"}
-        }
-      }
-    },
-    {
-      "type": "text",
-      "encode": {
-        "enter": {
-          "align": {"value": "center"},
-          "baseline": {"value": "bottom"},
-          "fill": {"value": "#333"}
-        },
-        "update": {
-          "x": {"scale": "xscale", "signal": "tooltip.tag", "band": 0.5},
-          "y": {"scale": "yscale", "signal": "tooltip.time", "offset": -2},
-          "text": {"signal": "tooltip.time"},
-          "fillOpacity": [
-            {"test": "datum === tooltip", "value": 0},
-            {"value": 1}
-          ]
-        }
-      }
-    },
-  ],
-  "signals": [
-    {
-      "name": "tooltip",
-      "value": {},
-      "on": [
-        {"events": "rect:mouseover", "update": "datum"},
-        {"events": "rect:mouseout",  "update": "{}"}
-      ]
-    }
-  ],
-}
-vega.embed('#chartLast7Days', chartLast7Days);
-
-// https://stackoverflow.com/a/14950153/
-(function(window, document, undefined){
-  window.onload = init;
-  function init(){
-    let tmp = document.getElementById("updateChartButton");
-    tmp.addEventListener('click', getTimesAndUpdateChart);
-  }
-})(window, document, undefined);
-
-function getArbitStartAndEndTimes() {
-  let arbitTimes = {};
-  arbitTimes.start = new Date(document.getElementById("arbitStartTime").value);
-  arbitTimes.end = new Date(document.getElementById("arbitEndTime").value);
-  console.log("start", arbitTimes.start.toLocaleString(), arbitTimes.end.toLocaleString());
-
-  return arbitTimes;
-}
-
-function getTimesAndUpdateChart() {
-  const arbitTimes = getArbitStartAndEndTimes();
-  timedTagsArbit = getTimesForTags(arbitTimes.start, arbitTimes.end);
-  let chartArbitTime = {
-    "$schema": "https://vega.github.io/schema/vega/v3.0.json",
-    "width": timedTagsArbit.length*10,
-    "height": 200,
-    "padding": 5,
-    "autosize": "pad",
-    "data": [
-      {
-        "name": "Tag times",
-        "values": timedTagsArbit,
-      }
-    ],
-    "scales": [
-      {
-        "name": "xscale",
-        "type": "band",
-        "domain": {"data": "Tag times", "field": "tag"},
-        "range": {"step": 60},
-        "padding": 0.05,
-        "round": true
-      },
-      {
-        "name": "yscale",
-        "domain": {"data": "Tag times", "field": "time"},
-        "nice": true,
-        "range": "height"
-      }
-    ],
-    "axes": [
-      { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-      { "orient": "left", "scale": "yscale", "title": "Time (s)" }
-    ],
-    "marks": [
-      {
-        "type": "rect",
-        "from": {"data":"Tag times"},
-        "encode": {
-          "enter": {
-            "x": {"scale": "xscale", "field": "tag"},
-            "width": {"scale": "xscale", "band": 1},
-            "y": {"scale": "yscale", "field": "time"},
-            "y2": {"scale": "yscale", "value": 0}
-          },
-          "update": {
-            "fill": {"value": "steelblue"}
-          },
-          "hover": {
-            "fill": {"value": "red"}
-          }
-        }
-      },
-      {
-        "type": "text",
-        "encode": {
-          "enter": {
-            "align": {"value": "center"},
-            "baseline": {"value": "bottom"},
-            "fill": {"value": "#333"}
-          },
-          "update": {
-            "x": {"scale": "xscale", "signal": "tooltip.tag", "band": 0.5},
-            "y": {"scale": "yscale", "signal": "tooltip.time", "offset": -2},
-            "text": {"signal": "tooltip.time"},
-            "fillOpacity": [
-              {"test": "datum === tooltip", "value": 0},
-              {"value": 1}
-            ]
-          }
-        }
-      },
-    ],
-    "signals": [
-      {
-        "name": "tooltip",
-        "value": {},
-        "on": [
-          {"events": "rect:mouseover", "update": "datum"},
-          {"events": "rect:mouseout",  "update": "{}"}
-        ]
-      }
-    ],
-  }
-  vega.embed('#chartArbitTime', chartArbitTime);
-}
