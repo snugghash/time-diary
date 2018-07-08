@@ -184,8 +184,20 @@ function getTimesForTags(startTime, endTime) {
  * Parse the tags out from the text description, rn just words ending with ';'
  * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
  * TODO combine the both this and fn from App.js into utilities
+ * TODO code between the two has diverged
  */
 function getTags(description) {
+  removeEdgeDoubleQuotes = function(description) {
+    let newDesc = description;
+    if(description[0] == "\"") {
+      newDesc = newDesc.slice(1);
+    }
+    if(description[-1] == "\"") {
+      newDesc = newDesc.slice(0,-1);
+    }
+    return newDesc;
+  }
+  description = removeEdgeDoubleQuotes(description);
   let endTags = description.split(" ").filter(function (word) {
     return word.slice(-1) === ";";
   }).map(function (word) {
