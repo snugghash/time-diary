@@ -48,7 +48,7 @@ let chart = {
   ],
   "axes": [
     { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-    { "orient": "left", "scale": "yscale", "title": "Time (s)" }
+    { "orient": "left", "scale": "yscale", "title": "Time (h)" }
   ],
   "marks": [
     {
@@ -158,7 +158,7 @@ function getTimesForTags(startTime, endTime) {
     if(entry.endTime >  startTime && entry.startTime < endTime) {
       entry.tags = getTags(entry.description)
       entry.tags.forEach( (tag) => {
-        const countedTime = (entry.endTime - entry.startTime)/1000;
+        const countedTime = (entry.endTime - entry.startTime)/1000/60/60;
         if(tagsArrayTmp.includes(tag)) {
           tagTimes[tagsArrayTmp.indexOf(tag)].time += countedTime;
         }
