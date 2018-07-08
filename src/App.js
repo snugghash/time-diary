@@ -47,7 +47,7 @@ class App extends Component {
     this.timer = setInterval(
       () => {
         if(this.state.tracking) {
-          this.setState(this.updateState)
+          this.setState(this.updateState);
         }
       },
       1000

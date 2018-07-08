@@ -1,4 +1,4 @@
-// TODO UX for choosing arbitrary time, maybe like chrone dev tools > perfprmance > time selector.
+// TODO UX for choosing arbitrary time, maybe like chrone dev tools > perfprmance > time selector. Using average text UX for now.
 // Or some weird log-scaled version for allowing days and months on the same element.
 // Maybe only months are necessary to be selected this way - last 7 days and last day adequate for short time scales.
 
@@ -48,7 +48,7 @@ let chart = {
   ],
   "axes": [
     { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-    { "orient": "left", "scale": "yscale", "title": "Time (ms)" }
+    { "orient": "left", "scale": "yscale", "title": "Time (s)" }
   ],
   "marks": [
     {
@@ -104,7 +104,8 @@ let chart = {
 vega.embed('#chartAllTime', chart);
 
 
-// TODO Numbers for tags don't work. tagTimes.indexOf(2) gives -1 even if 2 was in tagTimes.
+
+// TODO Numbers for tags don't work. tagTimes.indexOf("2") gives -1 even if 2 was in tagTimes.
 // Current workaround is to chnage entries to not have those.
 function getTimesForTags(startTime, endTime) {
   let tagsArrayTmp = [];
@@ -114,14 +115,15 @@ function getTimesForTags(startTime, endTime) {
     if(entry.endTime >  startTime && entry.startTime < endTime) {
       entry.tags = getTags(entry.description)
       entry.tags.forEach( (tag) => {
+        const countedTime = (entry.endTime - entry.startTime)/1000;
         if(tagsArrayTmp.includes(tag)) {
-          tagTimes[tagsArrayTmp.indexOf(tag)].time += entry.endTime - entry.startTime;
+          tagTimes[tagsArrayTmp.indexOf(tag)].time += countedTime;
         }
         else {
           tagsArrayTmp.push(tag);
           tagTimes.push({
             tag: tag,
-            time: entry.endTime - entry.startTime
+            time: countedTime
           });
         }
       });
@@ -189,7 +191,7 @@ let chartLast24Hours = {
   ],
   "axes": [
     { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-    { "orient": "left", "scale": "yscale", "title": "Time (ms)" }
+    { "orient": "left", "scale": "yscale", "title": "Time (s)" }
   ],
   "marks": [
     {
@@ -275,7 +277,7 @@ let chartLast7Days = {
   ],
   "axes": [
     { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-    { "orient": "left", "scale": "yscale", "title": "Time (ms)" }
+    { "orient": "left", "scale": "yscale", "title": "Time (s)" }
   ],
   "marks": [
     {
@@ -380,7 +382,7 @@ function getTimesAndUpdateChart() {
     ],
     "axes": [
       { "orient": "bottom", "scale": "xscale", "title": "Tags" },
-      { "orient": "left", "scale": "yscale", "title": "Time (ms)" }
+      { "orient": "left", "scale": "yscale", "title": "Time (s)" }
     ],
     "marks": [
       {
