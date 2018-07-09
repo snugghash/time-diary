@@ -133,6 +133,12 @@ class App extends Component {
           return {showPastUntil: prevState.showPastUntil - 3600000};
         }
       );}} >Load more</button>
+      <br/>
+      Or show until: <input type="text" defaultValue="YYYY-MM-DD HH:MM:SS" id="textbox-showPastUntil"/>
+      <input type="button" defaultValue="Update past" onClick={(function () {
+        this.setState(
+            {showPastUntil: new Date(document.getElementById("textbox-showPastUntil").value)}
+      )}).bind(this)}/>
       {pastArray}
       <button onClick={() => {
         window.localStorage.clear();
