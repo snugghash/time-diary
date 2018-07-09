@@ -189,10 +189,10 @@ function getTimesForTags(startTime, endTime) {
 function getTags(description) {
   removeEdgeDoubleQuotes = function(description) {
     let newDesc = description;
-    if(description[0] == "\"") {
+    if(description.slice(0,1) == "\"") {
       newDesc = newDesc.slice(1);
     }
-    if(description[-1] == "\"") {
+    if(description.slice(-1) == "\"") {
       newDesc = newDesc.slice(0,-1);
     }
     return newDesc;
@@ -201,6 +201,7 @@ function getTags(description) {
   let endTags = description.split(" ").filter(function (word) {
     return word.slice(-1) === ";";
   }).map(function (word) {
+    // TODO should we remove this?
     if(word[0] == '"') {
       return word.slice(1,-1);
     }
