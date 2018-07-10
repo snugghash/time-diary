@@ -16,8 +16,8 @@ if (Modernizr.localstorage) {
 
 
 // TODO remove storage for timedTags in localStorage
-let currentTime = new Date().getTime();
-timedTagsAllTime = getTimesForTags(0, currentTime)
+const currentTime = new Date().getTime();
+const timedTagsAllTime = getTimesForTags(0, currentTime)
 console.log(timedTagsAllTime);
 
 let chart = {
@@ -108,13 +108,13 @@ vega.embed('#chartAllTime', chart);
 
 
 
-timedTagsLast24Hours = getTimesForTags(currentTime - 1000*60*60*24, currentTime);
+const timedTagsLast24Hours = getTimesForTags(currentTime - 1000*60*60*24, currentTime);
 let chartLast24Hours = chart;
 chartLast24Hours.width = timedTagsLast24Hours.length*10;
 chartLast24Hours.data[0].values = timedTagsLast24Hours;
 vega.embed('#chartLast24Hours', chartLast24Hours);
 
-timedTagsLast7Days = getTimesForTags(currentTime - 1000*60*60*24*7, currentTime);
+const timedTagsLast7Days = getTimesForTags(currentTime - 1000*60*60*24*7, currentTime);
 let chartLast7Days = chart;
 chartLast24Hours.width = timedTagsLast7Days.length*10;
 chartLast24Hours.data[0].values = timedTagsLast7Days;
@@ -141,7 +141,7 @@ function getArbitStartAndEndTimes() {
 
 function getTimesAndUpdateChart() {
   const arbitTimes = getArbitStartAndEndTimes();
-  timedTagsArbit = getTimesForTags(arbitTimes.start, arbitTimes.end);
+  const timedTagsArbit = getTimesForTags(arbitTimes.start, arbitTimes.end);
   let chartArbitTime = chart;
   chartArbitTime.width = timedTagsArbit.length*10;
   chartArbitTime.data[0].values = timedTagsArbit;
