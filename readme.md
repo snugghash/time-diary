@@ -19,6 +19,9 @@
 ### TODO
 [] UX for in-between slices must make it clear that that time has a description
 [] UI for getting description
+[] Hashing and dates for auditing last change
+[] Encryption for protection
+[] Sync data to storage provider
 
 
 ## Support, feature requests, donations
