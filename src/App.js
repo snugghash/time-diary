@@ -140,9 +140,9 @@ class App extends Component {
             {showPastUntil: new Date(document.getElementById("textbox-showPastUntil").value)}
       )}).bind(this)}/>
       {pastArray}
-      <button onClick={() => {
+      {/* <button onClick={() => {
         window.localStorage.clear();
-      }} > CLEAR ALL DATA!!!11!! (Starts over from 0 time tracked, no confirmation) </button>
+      }} > CLEAR ALL DATA!!!11!! (Starts over from 0 time tracked, no confirmation) </button> */}
       </div>
     );
   }
