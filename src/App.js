@@ -3,6 +3,7 @@ import './css/Second.css';
 import './css/Minute.css';
 import './css/Hour.css';
 import './css/Split.css';
+let utilities = require('./utilities');
 
 
 // TODO Add ability to view arbitrary streches, TODO perhaps as a result of search
@@ -33,6 +34,7 @@ class App extends Component {
     this.uponSlicingTime = this.uponSlicingTime.bind(this);
     this.onSelect = this.onSelect.bind(this);
     this.onHoverOver = this.onHoverOver.bind(this);
+    this.storeEntry = utilities.storeEntry;
   }
 
 
@@ -296,63 +298,7 @@ class App extends Component {
 
 
 
-  /**
-   * Store given time slice data into localStorage
-   */
-  storeEntry = function (startTime, endTime, description, tags) {
-    let entries = [];
-    if(window.localStorage.getItem("entries") === null) {
-      ;
-    }
-    else {
-      entries = JSON.parse(window.localStorage["entries"]);
-    }
-    entries.push({startTime, endTime, description, tags});
-    window.localStorage["entries"] = JSON.stringify(entries);
 
-    // Collect all tags into a localStorage array.
-    let tagsList = [
-      'Games',
-      'Organizing',
-      'Work',
-      'Play',
-      'Distracted',
-      'Break',
-      'Timetracking'
-    ];
-    if(window.localStorage.getItem("tagList") === null) {
-      ;
-    }
-    else {
-      tagsList.push(JSON.parse(window.localStorage["tagsList"]));
-    }
-    tagsList = new Set(tagsList);
-    tags.forEach( (item) => {
-      tagsList.add(item);
-    });
-    tagsList = Array.from(tagsList);
-    // console.log("All tags:", tagsList);
-    window.localStorage["tagsList"] = JSON.stringify(tagsList);
-
-    // Add to times for each tag
-    let tagTimes = []
-    if(window.localStorage.getItem("tagTimes") === null) {
-      ;
-    }
-    else {
-      tagTimes = JSON.parse(window.localStorage["tagTimes"]);
-    }
-    tags.forEach( (item) => {
-      if(item in tagTimes)
-        tagTimes[tagTimes.indexOf(item)].time += endTime - startTime;
-      else
-        tagTimes.push({
-          tag: item,
-          time: endTime - startTime
-        });
-    });
-    window.localStorage["tagTimes"] = JSON.stringify(tagTimes);
-  };
 
 
 
