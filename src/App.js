@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import './DotaMatchTimes';
 import './css/Second.css';
 import './css/Minute.css';
 import './css/Hour.css';
 import './css/Split.css';
+import DotaMatchTimes from './DotaMatchTimes';
 let utilities = require('./utilities');
 
 
@@ -142,6 +144,7 @@ class App extends Component {
             {showPastUntil: new Date(document.getElementById("textbox-showPastUntil").value)}
       )}).bind(this)}/>
       {pastArray}
+      <DotaMatchTimes/>
       {/* <button onClick={() => {
         window.localStorage.clear();
       }} > CLEAR ALL DATA!!!11!! (Starts over from 0 time tracked, no confirmation) </button> */}
