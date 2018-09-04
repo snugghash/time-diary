@@ -47,6 +47,16 @@
                     Last 24 hours
                     <section id="chartLast24Hours" style="overflow:scroll;">
                     </section>
+                    Start time: <input id="arbitStartTime" type="text" hint="YYYY-MM-DD HH:MM:SS" />
+                    <br/>
+                    End time: <input id="arbitEndTime" type="text" hint="YYYY-MM-DD HH:MM:SS" />
+                    <br/>
+                    <input type="button" value="Update chart" id="updateChartButton"/>
+                    <br/>
+                    (Includes whole blocks if edges are in-between blocks)
+                    <br/>
+                    <section id="chartArbitTime" style="overflow:scroll;"></section>
+                    <section id="reports-root"></section>
                 </article>
 
             </div> <!-- #main -->
@@ -68,7 +78,7 @@
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.0-rc1/vega-core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-beta.17/vega-embed.js"></script>
-        <script src="js/reports.js"></script>
+        <script type="module" src="js/reports-old.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
