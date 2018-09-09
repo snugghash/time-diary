@@ -47,6 +47,21 @@ function storeEntry(startTime, endTime, description, tags) {
   else {
     entries = JSON.parse(window.localStorage["entries"]);
   }
+  // Unsustainable, maybe make it do it in reverse chronological order.
+  // TODO sort and bin search for stat time
+  let doNotAddFlag = 0;
+  entries.some(element => {
+    if(element.startTime == startTime && element.endTime == endTime && element.description == description) {
+      doNotAddFlag = 1;
+      return true;
+    }
+    return false;
+  });
+  // TODO Bad code
+  if(doNotAddFlag == 1) {
+    return;
+  }
+
   entries.push({startTime, endTime, description, tags});
   window.localStorage["entries"] = JSON.stringify(entries);
 
