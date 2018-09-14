@@ -145,6 +145,7 @@ class App extends Component {
       )}).bind(this)}/>
       {pastArray}
       <DotaMatchTimes/>
+      <br/>
       <button onClick={() => {
         utilities.sortStoredEntries();
       }} > Sort entries in localstorage </button>

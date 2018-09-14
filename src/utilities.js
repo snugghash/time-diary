@@ -1,4 +1,13 @@
 /**
+ * TODO data class
+ * Source: https://oli.me.uk/2013/06/08/searching-javascript-arrays-with-a-binary-search/
+ */
+// Entry.prototype.valueOf = function () {
+//   return this.startTime;
+// };
+
+
+/**
  * Parse the tags out from the text description, rn just words ending with ';'
  * or starting with '#'. TODO NLP, reuse snugghash/ephemeron perhaps
  * TODO combine the both this and fn from App.js into utilities
