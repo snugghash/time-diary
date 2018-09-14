@@ -111,7 +111,34 @@ function storeEntry(startTime, endTime, description, tags) {
 
 
 
+/**
+ * TODO make this happen automatically when implementing data layer
+ */
+function sortStoredEntries() {
+  let entries = [];
+  if(window.localStorage.getItem("entries") === null) {
+    ;
+  }
+  else {
+    entries = JSON.parse(window.localStorage["entries"]);
+  }
+
+  entries = Array.sort(entries, (a, b) => {
+    if(a.startTime - b.startTime !== 0) {
+      return a.startTime - b.startTime;
+    } else if(a.endTime < b.endTime) {
+      return a.endTime - b.endTime;
+    } else {
+      return a.description.length - b.description.length;
+    }
+  });
+
+  window.localStorage["entries"] = JSON.stringify(entries);
+}
+
+
 module.exports = {
   getTags,
   storeEntry,
+  sortStoredEntries
 }

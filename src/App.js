@@ -145,6 +145,9 @@ class App extends Component {
       )}).bind(this)}/>
       {pastArray}
       <DotaMatchTimes/>
+      <button onClick={() => {
+        utilities.sortStoredEntries();
+      }} > Sort entries in localstorage </button>
       {/* <button onClick={() => {
         window.localStorage.clear();
       }} > CLEAR ALL DATA!!!11!! (Starts over from 0 time tracked, no confirmation) </button> */}
