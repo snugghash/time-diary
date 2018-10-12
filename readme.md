@@ -22,6 +22,10 @@
 [] Hashing and dates for auditing last change
 [] Encryption for protection
 [] Sync data to storage provider
+[] Peer to peer sync
+
+### Known bugs, current fixability unknown
+[] Bug where the Vega charts hover area slowly gets reduced to 0 over the range of X in FF. No such problem in Chrome.
 
 
 ## Support, feature requests, donations
