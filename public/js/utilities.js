@@ -15,6 +15,9 @@ export function getTags(description) {
     }
     return newDesc;
   }
+  if(description == undefined || description.length == 0) {
+    return [];
+  }
   description = removeEdgeDoubleQuotes(description);
   let endTags = description.split(" ").filter(function (word) {
     return word.slice(-1) === ";";
