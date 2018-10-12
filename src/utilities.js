@@ -5,6 +5,7 @@
 // Entry.prototype.valueOf = function () {
 //   return this.startTime;
 // };
+// entries.sort();
 
 
 /**
@@ -135,10 +136,12 @@ function sortStoredEntries() {
   entries = Array.sort(entries, (a, b) => {
     if(a.startTime - b.startTime !== 0) {
       return a.startTime - b.startTime;
-    } else if(a.endTime < b.endTime) {
+    } else if(a.endTime - b.endTime !== 0) {
       return a.endTime - b.endTime;
-    } else {
+    } else if(a.description.length - b.description.length !== 0){
       return a.description.length - b.description.length;
+    } else {
+      return 1;
     }
   });
 
