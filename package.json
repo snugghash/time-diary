@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://snugghash.github.io/time-diary",
+  "start-at": "https://snugghash.github.io/time-diary",
   "dependencies": {
     "gh-pages": "^1.0.0",
     "react": "^15.6.1",
