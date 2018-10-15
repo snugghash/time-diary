@@ -1,6 +1,6 @@
 {
-  "short_name": "Time Diary",
-  "name": "Time tracking journal diary in client",
+  "short_name": "Time Journal",
+  "name": "Encrypted time tracking in client with insights",
   "icons": [
     {
       "src": "favicon.ico",
