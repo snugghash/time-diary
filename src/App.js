@@ -354,7 +354,7 @@ class App extends Component {
    */
   exportData = function () {
     let entries = localStorage.getItem("entries");
-    if(entries == null) {
+    if(entries == null || entries == undefined) {
       // TODO tests
       return;
     }
