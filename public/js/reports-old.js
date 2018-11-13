@@ -17,7 +17,7 @@ if (Modernizr.localstorage) {
 
 // TODO remove storage for timedTags in localStorage
 const currentTime = new Date().getTime();
-const timedTagsAllTime = getTimesForTags(0, currentTime)
+const timedTagsAllTime = getTimesForTags(0, currentTime).slice(0,545)
 console.log(timedTagsAllTime);
 
 let chart = {
